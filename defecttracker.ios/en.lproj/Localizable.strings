@@ -32,9 +32,8 @@
 "incomplete"="Incomplete";
 "info"="About this app";
 "loadProjects"="Load projects";
-"loggedinUntil"="Logged in until";
+"loggedin"="Logged in";
 "login"="Login";
-"loginDuration"="Login duration";
 "loginError"="Your login attempt did not succeed.";
 "loginName"="Login name";
 "logout"="Log out";
@@ -44,7 +43,7 @@
 "newDefect"="Create new defect report";
 "newElements %@"="New elements: %@";
 "none"="None";
-"notLoggedIn"="not logged in";
+"notLoggedIn"="Not logged in";
 "ok"="Ok";
 "onDate"="on";
 "oneDay"="1 day";
@@ -76,6 +75,7 @@
 "syncedComments" = "Comments: %@,\n";
 "syncedImages" = "Images: %@\n";
 "syncedProjects" = "Loaded from the cloud:\n%@ projects\n";
+"syncFailed" = "Synchronization failed.";
 "test"="Test code";
 "yourLoginName..."="Your login name";
 "yourPassword..."="Your password";

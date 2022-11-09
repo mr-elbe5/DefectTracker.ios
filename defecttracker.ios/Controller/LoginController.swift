@@ -13,7 +13,7 @@ class LoginController {
     
     public static var shared = LoginController()
     
-    func doLogin(serverURL: String, login: String, password: String, loginDuration: LoginDuration) -> Promise<LoginData>{
+    func doLogin(serverURL: String, login: String, password: String) -> Promise<LoginData>{
         return Promise { resolve, reject in
             var url = serverURL
             if url.hasSuffix("/"){
@@ -23,7 +23,6 @@ class LoginController {
             let params = [
                 "login" : login,
                 "password" : password,
-                "duration" : loginDuration.value
             ]
             RequestController.shared.requestJson(url: requestUrl, withParams: params).then {
                 (loginData : LoginData) in
@@ -50,7 +49,6 @@ class LoginController {
     func doLogout() -> Void{
         let loginData = Store.shared.loginData
         loginData.token = ""
-        loginData.expiration = nil
         DispatchQueue.main.async{
             Store.shared.setLoginData(data: loginData)
         }

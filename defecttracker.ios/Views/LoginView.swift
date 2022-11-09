@@ -14,8 +14,6 @@ struct LoginView: View{
     @State var serverURL = ""
     @State var login = ""
     @State var password = ""
-    @State var loginDuration = LoginDuration.today
-    @State var tokenExpiration : String = ""
     
     private enum alertKey{
         case incomplete, error
@@ -30,17 +28,10 @@ struct LoginView: View{
         self.serverURL = Store.shared.serverURL
         self.login = loginData.login
         self.password = ""
-        self.tokenExpiration = loginData.getTokenExpirationString()
     }
     
     var body: some View{
         Form{
-            Section{
-                VStack(alignment: .leading){
-                    Text("loggedinUntil".localize()+":")
-                    Text(tokenExpiration)
-                }
-            }
             Section{
                 VStack(alignment: .leading){
                     VStack(alignment: .leading, spacing: 2){
@@ -57,12 +48,6 @@ struct LoginView: View{
                             self.doLogin()
                         }).withTextFieldStyle()
                     }
-                    Text("loginDuration".localize())
-                    Picker(selection: $loginDuration, label: Text("")){
-                        ForEach(LoginDuration.allCases) { ld in
-                            Text(ld.name).tag(ld)
-                        }
-                    }.pickerStyle(SegmentedPickerStyle())
                 }
                 
             }
@@ -83,8 +68,6 @@ struct LoginView: View{
             Section{
                 Button(action: {
                     LoginController.shared.doLogout()
-                    let loginData = Store.shared.loginData
-                    self.tokenExpiration = loginData.getTokenExpirationString()
                 }) {
                     Text("logout")
                 }.disabled(!Store.shared.loginData.isLoggedIn())
@@ -101,9 +84,8 @@ struct LoginView: View{
     
     func doLogin() -> Void{
         if (self.isComplete()){
-            LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password, loginDuration: self.loginDuration).then{
+            LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password).then{
                 (loginData: LoginData) in
-                self.tokenExpiration = loginData.getTokenExpirationString()
                 DispatchQueue.main.async {
                     self.goBack()
                 }

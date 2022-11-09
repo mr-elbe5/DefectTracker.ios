@@ -36,7 +36,7 @@ class LocationData : Identifiable, Codable, ObservableObject{
         id = try values.decode(Int.self, forKey: .id)
         name = try values.decode(String.self, forKey: .name)
         description = try values.decode(String.self, forKey: .description)
-        plan = try values.decode(ImageData.self, forKey: .plan)
+        plan = try values.decodeIfPresent(ImageData.self, forKey: .plan)
         defects = try values.decode(Array<DefectData>.self, forKey: .defects)
     }
 

@@ -32,7 +32,7 @@
 "incomplete"="Unvollständig";
 "info"="Über diese App";
 "loadProjects"="Projekte neu laden";
-"loggedinUntil"="Angemeldet bis";
+"loggedin"="Angemeldet";
 "login"="Anmeldung";
 "loginDuration"="Anmeldedauer";
 "loginError"="Ihre Anmeldung war nicht erfolgreich.";
@@ -44,7 +44,7 @@
 "newDefect"="Neuen Mängelbericht erstellen";
 "newElements %@"="Neue Elemente: %@";
 "none"="Nicht vorhanden";
-"notLoggedIn"="nicht angemeldet";
+"notLoggedIn"="Nicht angemeldet";
 "ok"="Ok";
 "onDate"="am";
 "oneDay"="1 Tag";
@@ -76,6 +76,7 @@
 "syncedComments" = "Kommentare: %@,\n";
 "syncedImages" = "Bilder: %@\n";
 "syncedProjects" = "Aus der Cloud geladen:\n%@ Projekte\n";
+"syncFailed" = "Die Synchronisierung war nicht erfolgreich.";
 "yourLoginName..."="Ihr Anmeldename...";
 "yourPassword..."="Ihr Passwort...";
 "infoHeader1"="Voraussetzungen";

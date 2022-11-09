@@ -135,6 +135,9 @@ class ProjectController {
                     result.add(result: loadResult)
                     resolve(result)
                 }
+            }.onError{
+                (e) in
+                reject(e)
             }
         }
         

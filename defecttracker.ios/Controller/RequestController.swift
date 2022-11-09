@@ -124,7 +124,8 @@ struct RequestController {
                         decoder.dateDecodingStrategy = .millisecondsSince1970
                         let result = try decoder.decode(T.self, from: data!)
                         resolve(result)
-                    } catch {
+                    } catch let error{
+                        print(error)
                         reject(RequestError.unexpectedResponse)
                     }
                 }

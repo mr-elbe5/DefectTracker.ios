@@ -18,6 +18,7 @@ struct ServerView: View{
     }
     @State var showAlert1 = false;
     @State var showAlert2 = false;
+    @State var showAlert3 = false;
     @State var newElementsCount = 0
     @State var syncResult : SyncResult = SyncResult()
     
@@ -33,8 +34,8 @@ struct ServerView: View{
                             Text(store.serverURL)
                         }
                         VStack(alignment: .leading, spacing: 5){
-                            Text("loggedinUntil")
-                            Text(store.loginData.getTokenExpirationString()).foregroundColor(store.loginData.isLoginValid() ? Color.black : Color.red)
+                            Text(store.loginData.isLoggedIn() ? "loggedin" : "notLoggedIn")
+                                .foregroundColor(store.loginData.isLoggedIn() ? Color.black : Color.red)
                         }
                     }
                     NavigationLink(destination: LoginView()){
@@ -52,6 +53,10 @@ struct ServerView: View{
                                 self.syncResult = result
                                 self.newElementsCount=0
                                 self.showAlert1=true
+                            }.onError{
+                                (e) in
+                                self.shouldAnimate=false
+                                self.showAlert3=true
                             }
                         }) {
                             Text("synchronize")
@@ -62,6 +67,10 @@ struct ServerView: View{
                                 "syncedImages".localize(i: self.syncResult.imagesUploaded) + "\n" +
                                 "syncedProjects".localize(i: self.syncResult.projectsLoaded);
                             return Alert(title: Text("success"), message:Text(text), dismissButton: .default(Text("ok")))
+                            
+                        }.alert(isPresented: $showAlert3){
+                            let text = "syncFailed".localize();
+                            return Alert(title: Text("error"), message:Text(text), dismissButton: .default(Text("ok")))
                             
                         }
                     }
