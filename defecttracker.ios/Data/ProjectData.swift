@@ -13,7 +13,6 @@ class ProjectData : Identifiable, Codable, ObservableObject{
     
     enum CodingKeys: String, CodingKey {
         case id
-        case phase
         case name
         case description
         case locations
@@ -21,7 +20,6 @@ class ProjectData : Identifiable, Codable, ObservableObject{
     }
     
     @Published var id = 0
-    @Published var phase = ""
     @Published var name = ""
     @Published var description = ""
     
@@ -35,7 +33,6 @@ class ProjectData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        phase = try values.decode(String.self, forKey: .phase)
         name = try values.decode(String.self, forKey: .name)
         description = try values.decode(String.self, forKey: .description)
         locations = try values.decode(Array<LocationData>.self, forKey: .locations)
@@ -49,7 +46,6 @@ class ProjectData : Identifiable, Codable, ObservableObject{
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
-        try container.encode(phase, forKey: .phase)
         try container.encode(name, forKey: .name)
         try container.encode(description, forKey: .description)
         try container.encode(locations, forKey: .locations)
