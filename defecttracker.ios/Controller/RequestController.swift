@@ -18,6 +18,7 @@ struct RequestController {
         return !Store.shared.serverURL.isEmpty
     }
     
+    //todo
     private func badRequest<T>() -> Promise<T> {
         return Promise { _ , reject in
             reject(RequestError.invalidRequest)
@@ -58,6 +59,7 @@ struct RequestController {
         return request
     }
     
+    //todo
     func requestJson<T : Decodable>(url : String, withParams params : [String:String]?) -> Promise<T>{
         if let urlRequest = createRequest(url: url, method: "POST", headerFields:
             ["Content-Type" : "application/json",
@@ -68,6 +70,7 @@ struct RequestController {
         return badRequest()
     }
     
+    //todo
     func requestAuthorizedJson<T : Decodable>(url : String, withParams params : [String:String]?) -> Promise<T>{
         if let urlRequest = createRequest(url: url, method: "POST", headerFields:[
             "Content-Type" : "application/json",

@@ -14,6 +14,7 @@ class ProjectController {
     
     public static var shared = ProjectController()
     
+    //todo
     func loadProjects() -> Promise<SyncResult>{
         return Promise { resolve, reject in
             let requestUrl = Store.shared.serverURL+"/api/project/getProjects"
@@ -42,6 +43,7 @@ class ProjectController {
             self.clearProjectImages()
     }
     
+    //todo
     func loadProjectImages(data: ProjectList) -> Promise<SyncResult>{
         return Promise { resolve,reject in
             //print("start loading images")
@@ -98,6 +100,7 @@ class ProjectController {
         return count
     }
     
+    //todo
     func uploadNewItems() -> Promise<SyncResult>{
         return Promise { resolve, reject in
             let projects = Store.shared.projectList
@@ -128,6 +131,7 @@ class ProjectController {
         
     }
     
+    //todo
     func synchronize() -> Promise<SyncResult>{
         return Promise { resolve, reject in
             ProjectController.shared.uploadNewItems().then { result in

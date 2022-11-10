@@ -13,6 +13,7 @@ class LoginController {
     
     public static var shared = LoginController()
     
+    //todo
     func doLogin(serverURL: String, login: String, password: String) -> Promise<LoginData>{
         return Promise { resolve, reject in
             var url = serverURL

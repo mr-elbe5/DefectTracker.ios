@@ -60,7 +60,7 @@ struct PlanView: View{
                         self.setCurrentPosition(frameSize: geo.size, translation: value.translation)
                         self.startLocation = nil
                         self.newPosition = self.currentPosition
-                    }).animation(.default)
+                    }).animation(.default, value: 0)
             }.frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 .clipped().contentShape(Rectangle())
         }

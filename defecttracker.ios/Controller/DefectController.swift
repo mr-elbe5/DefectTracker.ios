@@ -14,6 +14,7 @@ class DefectController {
     
     public static var shared = DefectController()
     
+    //todo
     func uploadDefect(defect: DefectData, locationId: Int) -> Promise<SyncResult>{
         return Promise { resolve, reject in
             let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefect/" + String(locationId)

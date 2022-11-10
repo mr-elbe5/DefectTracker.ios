@@ -59,7 +59,7 @@ struct PositionFinderView: View{
                         }
                         self.startTime = nil
                         self.newPosition = self.currentPosition
-                    }).animation(.default)
+                    }).animation(.default, value: 0)
             }.frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 .clipped().contentShape(Rectangle())
             Text("setMarkerHint").font(.footnote).underline().background(Color.white).foregroundColor(Color.red).padding(3)

@@ -23,6 +23,7 @@ class ImageController{
         return UIImage(imageLiteralResourceName: "placeholder")
     }
     
+    //todo
     func loadImage(image : ImageData) -> Promise<UIImage>{
         return Promise{ resolve, reject in
             //print("start loading image \(image.id)")
@@ -49,6 +50,7 @@ class ImageController{
         }
     }
     
+    //todo
     func loadProjectImage(image : ImageData) -> Promise<Bool>{
         return Promise{ resolve, reject in
             if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
@@ -102,6 +104,7 @@ class ImageController{
         }
     }
     
+    //todo
     func loadImage(data: ImageData){
         if data.id == 0 {
             return
@@ -113,7 +116,7 @@ class ImageController{
         }
     }
     
-    
+    //todo
     func uploadDefectImage(image: ImageData, defectId: Int, count: Int) -> Promise<SyncResult>{
         return Promise { resolve, reject in
             let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId)
@@ -132,6 +135,7 @@ class ImageController{
         }
     }
     
+    //todo
     func uploadCommentImage(image: ImageData, commentId: Int, count: Int) -> Promise<SyncResult>{
         return Promise { resolve, reject in
             let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewCommentImage/" + String(commentId)

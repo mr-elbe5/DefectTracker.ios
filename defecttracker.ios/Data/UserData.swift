@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Then
 
 class UserData: Codable, Hashable, ObservableObject{
     

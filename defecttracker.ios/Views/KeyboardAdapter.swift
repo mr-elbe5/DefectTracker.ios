@@ -16,7 +16,7 @@ struct KeyboardAdapter: ViewModifier {
         GeometryReader { geometry in
             content
                 .padding(.bottom, self.currentHeight)
-                .animation(.easeOut(duration: 0.16))
+                .animation(.easeOut, value: 0.16)
                 .onAppear(perform: {
                     NotificationCenter.Publisher(center: NotificationCenter.default, name: UIResponder.keyboardWillShowNotification)
                         .merge(with: NotificationCenter.Publisher(center: NotificationCenter.default, name: UIResponder.keyboardWillChangeFrameNotification))
