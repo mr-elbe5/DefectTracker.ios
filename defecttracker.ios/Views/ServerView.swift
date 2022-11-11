@@ -20,6 +20,7 @@ struct ServerView: View{
     @State var showAlert2 = false;
     @State var showAlert3 = false;
     @State var newElementsCount = 0
+    
     @State var syncResult : SyncResult = SyncResult()
     
     @State private var shouldAnimate = false
@@ -47,15 +48,11 @@ struct ServerView: View{
                         Text("newElements \(String(newElementsCount))")
                         Button(action: {
                             self.shouldAnimate=true
-                            ProjectController.shared.synchronize().then{
-                                (result : SyncResult) in
-                                self.shouldAnimate=false
-                                self.syncResult = result
-                                self.newElementsCount=0
-                                self.showAlert1=true
-                            }.onError{
-                                (e) in
-                                self.shouldAnimate=false
+                            ProjectController.shared.synchronize(syncResult: syncResult)
+                            self.shouldAnimate=false
+                            self.newElementsCount=0
+                            self.showAlert1=true
+                            if syncResult.hasErrors(){
                                 self.showAlert3=true
                             }
                         }) {

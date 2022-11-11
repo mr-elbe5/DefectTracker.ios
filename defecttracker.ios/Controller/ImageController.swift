@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import Then
 
 class ImageController{
     
@@ -23,55 +22,47 @@ class ImageController{
         return UIImage(imageLiteralResourceName: "placeholder")
     }
     
-    //todo
-    func loadImage(image : ImageData) -> Promise<UIImage>{
-        return Promise{ resolve, reject in
-            //print("start loading image \(image.id)")
-            if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
-                //print("file exists")
-                let uiImage = DocumentStore.shared.readImage(name: image.getLocalFileName())
-                resolve(uiImage!)
-            }
-            else{
-                //print("file needs downloading")
-                let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
-                let params = [
-                    "scale" : "100"
-                ]
-                RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params).then {
-                    (img : UIImage) in
-                    //print("received image \(image.id) for \(image.getLocalFileName())")
-                    DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
-                    resolve(img)
-                }.onError {err in
-                    reject(err)
-                }
+    func loadImage(image : ImageData) async -> UIImage?{
+        print("start loading image \(image.id)")
+        if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
+            print("file exists")
+            let uiImage = DocumentStore.shared.readImage(name: image.getLocalFileName())
+            return uiImage
+        }
+        print("file needs downloading")
+        let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
+        let params = [
+            "scale" : "100"
+        ]
+        do{
+            if let img = try await RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params) {
+                print("received image \(image.id) for \(image.getLocalFileName())")
+                DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
+                return img
             }
         }
+        catch{
+            print("file load error")
+        }
+        return nil
     }
     
-    //todo
-    func loadProjectImage(image : ImageData) -> Promise<Bool>{
-        return Promise{ resolve, reject in
-            if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
-                //print("file exists")
-                resolve(false)
-            }
-            else{
-                //print("file needs downloading")
-                let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
-                let params = [
-                    "scale" : "100"
-                ]
-                RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params).then {
-                    (img : UIImage) in
-                    DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
-                    resolve(true)
-                }.onError {err in
-                    reject(err)
-                }
-            }
+    func loadProjectImage(image : ImageData) async throws -> Bool{
+        if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
+            print("file exists")
+            //todo?
+            return false
         }
+        print("file needs downloading")
+        let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
+        let params = [
+            "scale" : "100"
+        ]
+        if let img = try await RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params) {
+            DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
+            return true
+        }
+        return false
     }
     
     func savedPickedImage(uiImage : UIImage) -> ImageData{
@@ -104,54 +95,28 @@ class ImageController{
         }
     }
     
-    //todo
-    func loadImage(data: ImageData){
-        if data.id == 0 {
-            return
+    func uploadDefectImage(image: ImageData, defectId: Int, count: Int) async throws -> Bool{
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId)
+        let newFileName = "img-\(defectId)-\(count).jpg"
+        let uiImage = ImageController.shared.getImage(image: image)
+        if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
+            print("defect image uploaded with id \(response.id)")
+            image.id = response.id
+            return true
         }
-        //print("loading image \(data.id)")
-        ImageController.shared.loadImage(image: data).then{
-            (uiImage : UIImage) in
-            
-        }
+        return false
     }
     
-    //todo
-    func uploadDefectImage(image: ImageData, defectId: Int, count: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId)
-            let newFileName = "img-\(defectId)-\(count).jpg"
-            let uiImage = ImageController.shared.getImage(image: image)
-            RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName).then {
-                (response : IdResponse) in
-                //print("defect image uploaded with id \(response.id)")
-                DispatchQueue.main.async{
-                    image.id = response.id
-                }
-                let result = SyncResult()
-                result.imagesUploaded += 1
-                resolve(result)
-            }
+    func uploadCommentImage(image: ImageData, commentId: Int, count: Int) async throws -> Bool{
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewCommentImage/" + String(commentId)
+        let newFileName = "img-\(commentId)-\(count).jpg"
+        let uiImage = ImageController.shared.getImage(image: image)
+        if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
+            print("comment image uploaded with id \(response.id)")
+            image.id = response.id
+            return true
         }
-    }
-    
-    //todo
-    func uploadCommentImage(image: ImageData, commentId: Int, count: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewCommentImage/" + String(commentId)
-            let newFileName = "img-\(commentId)-\(count).jpg"
-            let uiImage = ImageController.shared.getImage(image: image)
-            RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName).then {
-                (response : IdResponse) in
-                //print("comment image uploaded with id \(response.id)")
-                DispatchQueue.main.async{
-                    image.id = response.id
-                }
-                let result = SyncResult()
-                result.imagesUploaded += 1
-                resolve(result)
-            }
-        }
+        return false
     }
     
 }

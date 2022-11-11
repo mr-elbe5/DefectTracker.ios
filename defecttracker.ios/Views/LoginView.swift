@@ -84,15 +84,18 @@ struct LoginView: View{
     
     func doLogin() -> Void{
         if (self.isComplete()){
-            LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password).then{
-                (loginData: LoginData) in
-                DispatchQueue.main.async {
-                    self.goBack()
+            Task{
+                do{
+                    if try await LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password){
+                        self.goBack()
+                    }else{
+                        self.currentAlert = .error
+                        self.showAlert1=true
+                    }
+                } catch{
+                    self.currentAlert = .error
+                    self.showAlert1=true
                 }
-            }.onError{
-                (e) in
-                self.currentAlert = .error
-                self.showAlert1=true
             }
         }
         else{

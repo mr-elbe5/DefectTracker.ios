@@ -8,26 +8,40 @@
 
 import Foundation
 
-class SyncResult{
+class SyncResult: ObservableObject{
     
-    var defectsUploaded : Int = 0
-    var commentsUploaded : Int = 0
-    var imagesUploaded : Int = 0
-    var projectsLoaded : Int = 0
-    var imagesDownloaded : Int = 0
+    @Published var defectsUploaded : Int = 0
+    @Published var defectUploadErrors : Int = 0
+    @Published var commentsUploaded : Int = 0
+    @Published var commentUploadErrors : Int = 0
+    @Published var imagesUploaded : Int = 0
+    @Published var imageUploadErrors : Int = 0
+    @Published var projectsLoaded : Int = 0
+    @Published var projectLoadErrors : Int = 0
+    @Published var imagesDownloaded : Int = 0
+    @Published var imageDownloadErrors : Int = 0
     
     func add(result : SyncResult){
         defectsUploaded += result.defectsUploaded
+        defectUploadErrors += result.defectUploadErrors
         commentsUploaded += result.commentsUploaded
+        commentUploadErrors += result.commentUploadErrors
         imagesUploaded += result.imagesUploaded
+        imageUploadErrors += result.imageUploadErrors
         projectsLoaded += result.projectsLoaded
+        projectLoadErrors += result.projectLoadErrors
         imagesDownloaded += result.imagesDownloaded
+        imageDownloadErrors += result.imageDownloadErrors
     }
     
     func addAll(results : Array<SyncResult>){
         for i in 0..<results.count{
             self.add(result: results[i])
         }
+    }
+    
+    func hasErrors() -> Bool{
+        imageDownloadErrors > 0
     }
     
 }

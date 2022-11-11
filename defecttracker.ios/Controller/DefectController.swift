@@ -7,88 +7,116 @@
 //
 
 import Foundation
-import Then
 import SwiftUI
 
 class DefectController {
     
     public static var shared = DefectController()
     
-    //todo
-    func uploadDefect(defect: DefectData, locationId: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefect/" + String(locationId)
-            var params = defect.getUploadParams()
-            params["creationDate"] = String(defect.creationDate.millisecondsSince1970)
-            params["dueDate"] = String(defect.dueDate.millisecondsSince1970)
-            RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params).then {
-                (response : IdResponse) in
-                //print("defect \(response.id) uploaded")
-                DispatchQueue.main.async{
-                    defect.id = response.id
-                    defect.displayId = response.id
-                }
-                var promises: [Promise<SyncResult>] = Array()
-                var count = 1
+    func uploadDefect(defect: DefectData, locationId: Int, syncResult: SyncResult) async throws{
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefect/" + String(locationId)
+        var params = defect.getUploadParams()
+        params["creationDate"] = String(defect.creationDate.millisecondsSince1970)
+        params["dueDate"] = String(defect.dueDate.millisecondsSince1970)
+        if let response: IdResponse = try await RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) {
+            print("defect \(response.id) uploaded")
+            syncResult.defectsUploaded += 1
+            defect.id = response.id
+            defect.displayId = response.id
+            await withTaskGroup(of: Void.self){ taskGroup in
+                var count = 0
                 for image in defect.images{
-                    promises.append(ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count))
                     count += 1
+                    do{
+                        if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
+                            syncResult.imagesUploaded += 1
+                        }
+                        else{
+                            syncResult.imageUploadErrors += 1
+                        }
+                    }
+                    catch{
+                        syncResult.imageUploadErrors += 1
+                    }
                 }
                 for comment in defect.comments{
                     if (comment.isNew){
-                        promises.append(DefectController.shared.uploadComment(comment: comment, defectId: response.id))
+                        do{
+                            try await uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
+                        }
+                        catch{
+                            syncResult.defectUploadErrors += 1
+                        }
                     }
                 }
-                Promises.whenAll(promises).then { array in
-                    let result = SyncResult()
-                    result.defectsUploaded = 1
-                    result.addAll(results: array)
-                    resolve(result)
-                }
-            }.onError{
-                (e) in
-                print(e)
-                reject(e)
             }
-            
+            await withTaskGroup(of: Void.self){ taskGroup in
+                var count = 0
+                for image in defect.images{
+                    count += 1
+                    do{
+                        if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
+                            syncResult.imagesUploaded += 1
+                        }
+                        else{
+                            syncResult.imageUploadErrors += 1
+                        }
+                    }
+                    catch{
+                        syncResult.imageUploadErrors += 1
+                    }
+                    
+                }
+                for comment in defect.comments{
+                    if (comment.isNew){
+                        do{
+                            try await DefectController.shared.uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
+                        }
+                        catch{
+                            syncResult.commentUploadErrors += 1
+                        }
+                    }
+                }
+            }
         }
-        
+        else{
+            syncResult.defectUploadErrors += 1
+        }
     }
     
-    func uploadComment(comment: DefectCommentData, defectId: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewComment/" + String(defectId)
-            var params = comment.getUploadParams()
-            params["creationDate"] = String(comment.creationDate.millisecondsSince1970)
-            params["defectId"] = String(defectId)
-            RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params).then {
-                (response : IdResponse) in
-                //print("comment \(response.id) uploaded")
-                DispatchQueue.main.async{
-                    comment.id = response.id
-                }
-                var promises: [Promise<SyncResult>] = Array()
-                var count = 1
+    func uploadComment(comment: DefectCommentData, defectId: Int, syncResult: SyncResult) async throws{
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewComment/" + String(defectId)
+        var params = comment.getUploadParams()
+        params["creationDate"] = String(comment.creationDate.millisecondsSince1970)
+        params["defectId"] = String(defectId)
+        if let response: IdResponse = try await RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) {
+            print("comment \(response.id) uploaded")
+            syncResult.commentsUploaded += 1
+            comment.id = response.id
+            await withTaskGroup(of: Void.self){ taskGroup in
+                var count = 0
                 for image in comment.images{
-                    promises.append(ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count))
                     count += 1
+                    do{
+                        if try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count){
+                            syncResult.imagesUploaded += 1
+                        }
+                        else{
+                            syncResult.imageUploadErrors += 1
+                        }
+                    }
+                    catch{
+                        syncResult.imageUploadErrors += 1
+                    }
+                    
                 }
-                Promises.whenAll(promises).then { array in
-                    let result = SyncResult()
-                    result.commentsUploaded = 1
-                    result.addAll(results: array)
-                    resolve(result)
-                }
-            }.onError{
-                (e) in
-                print(e)
-                reject(e)
             }
             
         }
-        
+        else{
+            syncResult.commentUploadErrors += 1
+        }
     }
-
     
 }
 
