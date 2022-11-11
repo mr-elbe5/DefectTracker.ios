@@ -41,7 +41,6 @@
 		4E81C0A72445ECCA00D31927 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0A62445ECCA00D31927 /* ImageModel.swift */; };
 		4E81C0AD2445ECD900D31927 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0A92445ECD900D31927 /* ImagePicker.swift */; };
 		4E81C0AE2445ECD900D31927 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0AA2445ECD900D31927 /* LoginView.swift */; };
-		4E81C0B22445ED2200D31927 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 4E81C0B12445ED2200D31927 /* Then */; };
 		4E81C0B42446325C00D31927 /* Statics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0B32446325C00D31927 /* Statics.swift */; };
 		4E88CCD9247B0F200054E64C /* StaticPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E88CCD8247B0F200054E64C /* StaticPlanView.swift */; };
 		4E8961A32472745500626EF3 /* GridStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8961A22472745500626EF3 /* GridStack.swift */; };
@@ -123,7 +122,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E81C0B22445ED2200D31927 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +276,6 @@
 			);
 			name = defecttracker;
 			packageProductDependencies = (
-				4E81C0B12445ED2200D31927 /* Then */,
 			);
 			productName = defecttracker.ios;
 			productReference = 4E81C06D2445E7B100D31927 /* defecttracker.app */;
@@ -310,7 +307,6 @@
 			);
 			mainGroup = 4E81C0642445E7B100D31927;
 			packageReferences = (
-				4E81C0B02445ED2200D31927 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = 4E81C06E2445E7B100D31927 /* Products */;
 			projectDirPath = "";
@@ -597,25 +593,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4E81C0B02445ED2200D31927 /* XCRemoteSwiftPackageReference "Then" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/freshOS/Then";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4E81C0B12445ED2200D31927 /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E81C0B02445ED2200D31927 /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4E81C0652445E7B100D31927 /* Project object */;
 }
