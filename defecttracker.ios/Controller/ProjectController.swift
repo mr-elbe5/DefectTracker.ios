@@ -7,33 +7,34 @@
 //
 
 import Foundation
-import Then
 import SwiftUI
+
+protocol ProjectControllerDelegate{
+    
+    
+    
+}
 
 class ProjectController {
     
     public static var shared = ProjectController()
     
+    var delegate : ProjectControllerDelegate? = nil
+    
     //todo
-    func loadProjects() -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/project/getProjects"
-            let params = Dictionary<String,String>()
-            RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params).then {
-                (projectList : ProjectList) in
-                //print(projectList)
-                self.loadProjectImages(data: projectList).then { result in
-                    result.projectsLoaded = projectList.projects.count
-                    //print("saving project list")
-                    Store.shared.setProjectList(data: projectList)
-                    resolve(result)
-                }
-            }.onError{
-                (e) in
-                print(e)
-                reject(e)
+    func loadProjects(callback: @escaping (ProjectList) -> Void){
+        let requestUrl = Store.shared.serverURL+"/api/project/getProjects"
+        let params = Dictionary<String,String>()
+        RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) { (projectList: ProjectList?, error) in
+            if let projectList = projectList{
+            //print(projectList)
+                self.loadProjectImages(data: projectList) { result in
+                //result.projectsLoaded = projectList.projects.count
+                //print("saving project list")
+                Store.shared.setProjectList(data: projectList)
+                //result(result)
             }
-            
+        }
         }
         
     }
@@ -44,35 +45,29 @@ class ProjectController {
     }
     
     //todo
-    func loadProjectImages(data: ProjectList) -> Promise<SyncResult>{
-        return Promise { resolve,reject in
-            //print("start loading images")
-            var promises: [Promise<Bool>] = Array()
-            for project in data.projects{
-                for location in project.locations{
-                    if location.plan != nil {
-                        promises.append(ImageController.shared.loadProjectImage(image: location.plan!))
+    func loadProjectImages(data: ProjectList, callback: @escaping (ProjectList) -> Void){
+        //print("start loading images")
+        for project in data.projects{
+            for location in project.locations{
+                if location.plan != nil {
+                    ImageController.shared.loadProjectImage(image: location.plan!){ success in
+                        
                     }
-                    for defect in location.defects{
-                        for image in defect.images{
-                            promises.append(ImageController.shared.loadProjectImage(image: image))
+                }
+                for defect in location.defects{
+                    for image in defect.images{
+                        ImageController.shared.loadProjectImage(image: image){ success in
+                            
                         }
-                        for comment in defect.comments{
-                            for image in comment.images{
-                                promises.append(ImageController.shared.loadProjectImage(image: image))
+                    }
+                    for comment in defect.comments{
+                        for image in comment.images{
+                            ImageController.shared.loadProjectImage(image: image){ success in
+                                
                             }
                         }
                     }
                 }
-            }
-            Promises.whenAll(promises).then { array in
-                let result = SyncResult()
-                for i in 0..<array.count {
-                    if array[i]{
-                        result.imagesDownloaded += 1
-                    }
-                }
-                resolve(result)
             }
         }
     }
@@ -101,47 +96,37 @@ class ProjectController {
     }
     
     //todo
-    func uploadNewItems() -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let projects = Store.shared.projectList
-            var promises: [Promise<SyncResult>] = Array()
-            for project in projects.projects{
-                for location in project.locations{
-                    for defect in location.defects{
-                        if (defect.isNew){
-                            promises.append(DefectController.shared.uploadDefect(defect: defect, locationId: location.id))
+    func uploadNewItems(callback: @escaping (Bool) -> Void){
+        let projects = Store.shared.projectList
+        for project in projects.projects{
+            for location in project.locations{
+                for defect in location.defects{
+                    if (defect.isNew){
+                        DefectController.shared.uploadDefect(defect: defect, locationId: location.id){ success in
+                            
                         }
-                        else{
-                            for comment in defect.comments{
-                                if (comment.isNew){
-                                    promises.append(DefectController.shared.uploadComment(comment: comment, defectId: defect.id))
+                    }
+                    else{
+                        for comment in defect.comments{
+                            if (comment.isNew){
+                                DefectController.shared.uploadComment(comment: comment, defectId: defect.id){ success in
+                                    
                                 }
                             }
                         }
                     }
                 }
             }
-            Promises.whenAll(promises).then { (array : Array<SyncResult>) in
-                //print("all uploaded")
-                let result = SyncResult();
-                result.addAll(results: array)
-                resolve(result)
-            }
         }
         
     }
     
     //todo
-    func synchronize() -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            ProjectController.shared.uploadNewItems().then { result in
-                ProjectController.shared.loadProjects().then { loadResult in
-                    result.add(result: loadResult)
-                    resolve(result)
-                }
-            }.onError{
-                (e) in
-                reject(e)
+    func synchronize(){
+        ProjectController.shared.uploadNewItems() { result in
+            ProjectController.shared.loadProjects() { loadResult in
+                //result.add(result: loadResult)
+                
             }
         }
         

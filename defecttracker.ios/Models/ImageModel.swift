@@ -13,10 +13,11 @@ class ImageModel: ObservableObject {
     @Published var image = UIImage(imageLiteralResourceName: "placeholder")
     
     func load(data: ImageData) {
-        ImageController().loadImage(image: data).then{
-            (img : UIImage) in
-            DispatchQueue.main.async{
-                self.image = img
+        ImageController().loadImage(image: data){ (result: UIImage?, error) in
+            if let result = result{
+                DispatchQueue.main.async{
+                    self.image = result
+                }
             }
         }
     }

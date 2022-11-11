@@ -7,14 +7,15 @@
 //
 
 import Foundation
+import SwiftUI
 
-class SyncResult{
+class SyncResult: ObservableObject{
     
-    var defectsUploaded : Int = 0
-    var commentsUploaded : Int = 0
-    var imagesUploaded : Int = 0
-    var projectsLoaded : Int = 0
-    var imagesDownloaded : Int = 0
+    @Published var defectsUploaded : Int = 0
+    @Published var commentsUploaded : Int = 0
+    @Published var imagesUploaded : Int = 0
+    @Published var projectsLoaded : Int = 0
+    @Published var imagesDownloaded : Int = 0
     
     func add(result : SyncResult){
         defectsUploaded += result.defectsUploaded

@@ -24,6 +24,10 @@ struct ServerView: View{
     
     @State private var shouldAnimate = false
     
+    init(){
+        ProjectController.shared.delegate = self
+    }
+    
     var body: some View{
         ZStack{
             Form{
@@ -47,17 +51,7 @@ struct ServerView: View{
                         Text("newElements \(String(newElementsCount))")
                         Button(action: {
                             self.shouldAnimate=true
-                            ProjectController.shared.synchronize().then{
-                                (result : SyncResult) in
-                                self.shouldAnimate=false
-                                self.syncResult = result
-                                self.newElementsCount=0
-                                self.showAlert1=true
-                            }.onError{
-                                (e) in
-                                self.shouldAnimate=false
-                                self.showAlert3=true
-                            }
+                            ProjectController.shared.synchronize()
                         }) {
                             Text("synchronize")
                         }.alert(isPresented: $showAlert1){
@@ -96,6 +90,11 @@ struct ServerView: View{
             self.newElementsCount = ProjectController.shared.countNewElements()
         }
     }
+    
+}
+
+extension ServerView: ProjectControllerDelegate{
+    
     
 }
 

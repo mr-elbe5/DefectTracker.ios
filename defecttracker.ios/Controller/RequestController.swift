@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import Then
 
 struct RequestController {
     
@@ -16,13 +15,6 @@ struct RequestController {
     
     func hasServerURL() -> Bool{
         return !Store.shared.serverURL.isEmpty
-    }
-    
-    //todo
-    private func badRequest<T>() -> Promise<T> {
-        return Promise { _ , reject in
-            reject(RequestError.invalidRequest)
-        }
     }
     
     private func createRequest(url : String, method: String, headerFields : [String : String]?, params : [String:String]?) -> URLRequest? {
@@ -60,40 +52,46 @@ struct RequestController {
     }
     
     //todo
-    func requestJson<T : Decodable>(url : String, withParams params : [String:String]?) -> Promise<T>{
+    func requestJson<T : Decodable>(url : String, withParams params : [String:String]?, callback: @escaping (T?, Error?) -> Void){
         if let urlRequest = createRequest(url: url, method: "POST", headerFields:
             ["Content-Type" : "application/json",
              "Accept" : "application/json"
         ], params: params){
-            return self.launchJsonRequest(with: urlRequest)
+            return launchJsonRequest(with: urlRequest, callback: callback)
         }
-        return badRequest()
+        else{
+            callback(nil, RequestError.invalidRequest)
+        }
     }
     
     //todo
-    func requestAuthorizedJson<T : Decodable>(url : String, withParams params : [String:String]?) -> Promise<T>{
+    func requestAuthorizedJson<T : Decodable>(url : String, withParams params : [String:String]?, callback: @escaping (T?, Error?) -> Void){
         if let urlRequest = createRequest(url: url, method: "POST", headerFields:[
             "Content-Type" : "application/json",
             "Accept" : "application/json",
             "Authentication" : Store.shared.loginData.token
         ], params: params){
-            return self.launchJsonRequest(with: urlRequest)
+            launchJsonRequest(with: urlRequest, callback: callback)
         }
-        return badRequest()
+        else{
+            callback(nil, RequestError.invalidRequest)
+        }
     }
     
-    func requestAuthorizedImage(url : String, withParams params : [String:String]?) -> Promise<UIImage>{
+    func requestAuthorizedImage(url : String, withParams params : [String:String]?, callback: @escaping (UIImage?, Error?) -> Void){
         if let urlRequest = createRequest(url: url, method: "POST", headerFields: [
             "Content-Type" : "application/json",
             "Accept" : "application/json",
             "Authentication" : Store.shared.loginData.token
         ], params: params){
-            return self.launchImageRequest(with: urlRequest)
+            launchImageRequest(with: urlRequest, callback: callback)
         }
-        return badRequest()
+        else{
+            callback(nil, RequestError.invalidRequest)
+        }
     }
     
-    func uploadAuthorizedImage(url : String, withImage uiImage : UIImage,fileName: String ) -> Promise<IdResponse>{
+    func uploadAuthorizedImage<T : Decodable>(url : String, withImage uiImage : UIImage,fileName: String, callback: @escaping (T?, Error?) -> Void){
         if let data = uiImage.jpegData(compressionQuality: 0.8) {
             if let urlRequest = createRequest(url: url, method: "POST", headerFields: [
                 "Content-Type" : "application/octet-stream",
@@ -102,67 +100,65 @@ struct RequestController {
                 "Accept" : "application/json",
                 "Authentication" : Store.shared.loginData.token
             ], body: data){
-                return self.launchJsonRequest(with: urlRequest)
+                launchJsonRequest(with: urlRequest, callback: callback)
             }
         }
-        return badRequest()
+        else{
+            callback(nil, RequestError.invalidRequest)
+        }
     }
     
-    private func launchJsonRequest<T : Decodable>(with request : URLRequest) -> Promise<T>{
-        return Promise { resolve, reject in
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                var statusCode = 0
-                if (response != nil && response is HTTPURLResponse){
-                    let httpResponse = response! as! HTTPURLResponse
-                    statusCode = httpResponse.statusCode
-                }
-                if let error = error {
+    private func launchJsonRequest<T : Decodable>(with request : URLRequest, callback: @escaping (T?, Error?) -> Void){
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            var statusCode = 0
+            if (response != nil && response is HTTPURLResponse){
+                let httpResponse = response! as! HTTPURLResponse
+                statusCode = httpResponse.statusCode
+            }
+            if let error = error {
+                print(error)
+                callback(nil, error)
+            } else if (statusCode>0 && statusCode != 200 ){
+                callback(nil, ResponseError(code: statusCode))
+            } else {
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .millisecondsSince1970
+                    let object = try decoder.decode(T.self, from: data!)
+                    callback(object, nil)
+                } catch let error{
                     print(error)
-                    reject(error)
-                } else if (statusCode>0 && statusCode != 200 ){
-                    reject(ResponseError(code: statusCode))
-                } else {
-                    do {
-                        let decoder = JSONDecoder()
-                        decoder.dateDecodingStrategy = .millisecondsSince1970
-                        let result = try decoder.decode(T.self, from: data!)
-                        resolve(result)
-                    } catch let error{
-                        print(error)
-                        reject(RequestError.unexpectedResponse)
-                    }
+                    callback(nil, RequestError.unexpectedResponse)
                 }
             }
-            task.resume()
         }
+        task.resume()
     }
     
-    private func launchImageRequest(with request : URLRequest) -> Promise<UIImage>{
-        return Promise { resolve, reject in
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                var statusCode = 0
-                if (response != nil && response is HTTPURLResponse){
-                    let httpResponse = response! as! HTTPURLResponse
-                    statusCode = httpResponse.statusCode
-                }
-                if let error = error {
-                    reject(error)
-                } else if (statusCode>0 && statusCode != 200 ){
-                    reject(ResponseError(code: statusCode))
-                } else {
-                    do {
-                        if let image = UIImage(data: data!){
-                            //print("image received from server")
-                            resolve(image)
-                        }
-                        else {
-                            reject(RequestError.unexpectedResponse)
-                        }
+    private func launchImageRequest(with request : URLRequest, callback: @escaping (UIImage?, Error?) -> Void){
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            var statusCode = 0
+            if (response != nil && response is HTTPURLResponse){
+                let httpResponse = response! as! HTTPURLResponse
+                statusCode = httpResponse.statusCode
+            }
+            if let error = error {
+                callback(nil, error)
+            } else if (statusCode>0 && statusCode != 200 ){
+                callback(nil, ResponseError(code: statusCode))
+            } else {
+                do {
+                    if let image = UIImage(data: data!){
+                        //print("image received from server")
+                        callback(image, nil)
+                    }
+                    else {
+                        callback(nil, RequestError.unexpectedResponse)
                     }
                 }
             }
-            task.resume()
         }
+        task.resume()
     }
     
 }

@@ -7,84 +7,103 @@
 //
 
 import Foundation
-import Then
 import SwiftUI
 
 class DefectController {
     
     public static var shared = DefectController()
     
-    //todo
-    func uploadDefect(defect: DefectData, locationId: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefect/" + String(locationId)
-            var params = defect.getUploadParams()
-            params["creationDate"] = String(defect.creationDate.millisecondsSince1970)
-            params["dueDate"] = String(defect.dueDate.millisecondsSince1970)
-            RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params).then {
-                (response : IdResponse) in
+    func uploadDefect(defect: DefectData, locationId: Int, callback: @escaping (Bool) -> Void){
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefect/" + String(locationId)
+        var params = defect.getUploadParams()
+        params["creationDate"] = String(defect.creationDate.millisecondsSince1970)
+        params["dueDate"] = String(defect.dueDate.millisecondsSince1970)
+        RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) { (result: IdResponse?, error) in
+            if let result = result{
                 //print("defect \(response.id) uploaded")
                 DispatchQueue.main.async{
-                    defect.id = response.id
-                    defect.displayId = response.id
+                    defect.id = result.id
+                    defect.displayId = result.id
                 }
-                var promises: [Promise<SyncResult>] = Array()
-                var count = 1
-                for image in defect.images{
-                    promises.append(ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count))
-                    count += 1
+                if defect.images.count == 0 && defect.comments.count == 0{
+                    callback(true)
                 }
-                for comment in defect.comments{
-                    if (comment.isNew){
-                        promises.append(DefectController.shared.uploadComment(comment: comment, defectId: response.id))
+                else{
+                    var imgcount = 0
+                    var cbcount = 0
+                    for image in defect.images{
+                        ImageController.shared.uploadDefectImage(image: image, defectId: result.id, count: imgcount){ success in
+                            if success{
+                                imgcount += 1
+                                if imgcount + cbcount == defect.images.count + defect.comments.count{
+                                    callback(true)
+                                }
+                            }
+                            else{
+                                callback(false)
+                            }
+                        }
+                    }
+                    for comment in defect.comments{
+                        if (comment.isNew){
+                            DefectController.shared.uploadComment(comment: comment, defectId: result.id){ success in
+                                if success{
+                                    cbcount += 1
+                                    if imgcount + cbcount == defect.images.count + defect.comments.count{
+                                        callback(true)
+                                    }
+                                }
+                                else{
+                                    callback(false)
+                                }
+                            }
+                        }
                     }
                 }
-                Promises.whenAll(promises).then { array in
-                    let result = SyncResult()
-                    result.defectsUploaded = 1
-                    result.addAll(results: array)
-                    resolve(result)
-                }
-            }.onError{
-                (e) in
-                print(e)
-                reject(e)
             }
-            
+            else{
+                print("upload defect error")
+                callback(false)
+            }
         }
         
     }
     
-    func uploadComment(comment: DefectCommentData, defectId: Int) -> Promise<SyncResult>{
-        return Promise { resolve, reject in
-            let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewComment/" + String(defectId)
-            var params = comment.getUploadParams()
-            params["creationDate"] = String(comment.creationDate.millisecondsSince1970)
-            params["defectId"] = String(defectId)
-            RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params).then {
-                (response : IdResponse) in
+    func uploadComment(comment: DefectCommentData, defectId: Int, callback: @escaping (Bool) -> Void){
+        let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewComment/" + String(defectId)
+        var params = comment.getUploadParams()
+        params["creationDate"] = String(comment.creationDate.millisecondsSince1970)
+        params["defectId"] = String(defectId)
+        RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) { (result: IdResponse?, error) in
+            if let result = result{
                 //print("comment \(response.id) uploaded")
                 DispatchQueue.main.async{
-                    comment.id = response.id
+                    comment.id = result.id
                 }
-                var promises: [Promise<SyncResult>] = Array()
-                var count = 1
-                for image in comment.images{
-                    promises.append(ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count))
-                    count += 1
+                if comment.images.count == 0{
+                    callback(true)
                 }
-                Promises.whenAll(promises).then { array in
-                    let result = SyncResult()
-                    result.commentsUploaded = 1
-                    result.addAll(results: array)
-                    resolve(result)
+                else{
+                    var count = 0
+                    for image in comment.images{
+                        ImageController.shared.uploadCommentImage(image: image, commentId: result.id, count: count){ success in
+                            if success{
+                                count += 1
+                                if count == comment.images.count{
+                                    callback(true)
+                                }
+                            }
+                            else{
+                                callback(false)
+                            }
+                        }
+                    }
                 }
-            }.onError{
-                (e) in
-                print(e)
-                reject(e)
             }
-            
+            else{
+                print("upload defect comment error")
+                callback(false)
+            }
         }
         
     }

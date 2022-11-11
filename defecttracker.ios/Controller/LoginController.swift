@@ -7,44 +7,37 @@
 //
 
 import Foundation
-import Then
 
 class LoginController {
     
     public static var shared = LoginController()
     
     //todo
-    func doLogin(serverURL: String, login: String, password: String) -> Promise<LoginData>{
-        return Promise { resolve, reject in
-            var url = serverURL
-            if url.hasSuffix("/"){
-                url=String(url.dropLast(1))
-            }
-            let requestUrl = url+"/api/user/login"
-            let params = [
-                "login" : login,
-                "password" : password,
-            ]
-            RequestController.shared.requestJson(url: requestUrl, withParams: params).then {
-                (loginData : LoginData) in
+    func doLogin(serverURL: String, login: String, password: String, callback: @escaping (Bool) -> Void){
+        var url = serverURL
+        if url.hasSuffix("/"){
+            url=String(url.dropLast(1))
+        }
+        let requestUrl = url+"/api/user/login"
+        let params = [
+            "login" : login,
+            "password" : password,
+        ]
+        RequestController.shared.requestJson(url: requestUrl, withParams: params) { (loginData:LoginData?, error) in
+            if let loginData = loginData{
                 if (loginData.isLoggedIn()){
                     DispatchQueue.main.async{
                         Store.shared.setServerURL(url: url)
                         Store.shared.setLoginData(data: loginData)
                     }
                     //print("\(loginData.dump())")
-                    resolve(loginData)
+                    callback(true)
                 }
-                else{
-                    reject(RequestError.unexpectedResponse)
-                }
-            }.onError{
-                (e) in
-                reject(e)
             }
-            
+            else{
+                callback(false)
+            }
         }
-        
     }
     
     func doLogout() -> Void{
