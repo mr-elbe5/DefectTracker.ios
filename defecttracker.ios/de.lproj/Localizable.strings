@@ -23,6 +23,7 @@
 "enterDescription"="Tragen Sie die Beschreibung hier ein";
 "error"="Fehler";
 "fillAllFields"="Füllen Sie bitte alle Felder mit * aus.";
+"finished" = "Beendet: %@";
 "forToday"="heute";
 "hello"="Hallo Welt!!";
 "hideKeyboard"="Tastatur verbergen";
@@ -44,6 +45,7 @@
 "newComment"="Einen Kommentar hinzufügen";
 "newDefect"="Neuen Mängelbericht erstellen";
 "newElements %@"="Neue Elemente: %@";
+"no"="nein";
 "none"="Nicht vorhanden";
 "notLoggedIn"="Nicht angemeldet";
 "ok"="Ok";
@@ -75,11 +77,12 @@
 "syncedDefects" = "Mängel: %@";
 "syncedComments" = "Kommentare: %@";
 "syncedImages" = "Bilder: %@";
-"syncedLocations" = "Locations:%@";
-"syncedProjects" = "Projekte:%@";
+"syncedLocations" = "Orte: %@";
+"syncedProjects" = "Projekte: %@";
 "syncFailed" = "Die Synchronisierung war nicht erfolgreich.";
 "syncErrors" = "Fehler: %@";
-"uploaded"="Auf den Server gladen:";
+"uploaded"="Auf den Server geladen:";
+"yes"="ja";
 "yourLoginName..."="Ihr Anmeldename...";
 "yourPassword..."="Ihr Passwort...";
 "infoHeader1"="Voraussetzungen";

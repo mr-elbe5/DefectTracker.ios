@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 class SyncResult: ObservableObject{
     
     @Published var defectsUploaded : Int = 0
@@ -22,6 +23,8 @@ class SyncResult: ObservableObject{
     
     @Published var uploadErrors : Int = 0
     @Published var downloadErrors : Int = 0
+    
+    @Published var finished = false
     
     func hasErrors() -> Bool{
         uploadErrors > 0 || downloadErrors > 0
@@ -40,6 +43,8 @@ class SyncResult: ObservableObject{
         
         uploadErrors = 0
         downloadErrors = 0
+        
+        finished = false
         
     }
     

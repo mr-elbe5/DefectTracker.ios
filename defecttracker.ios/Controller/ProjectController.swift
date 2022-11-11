@@ -9,27 +9,24 @@
 import Foundation
 import SwiftUI
 
-protocol ProjectControllerDelegate{
-    func syncReady()
-}
-
 class ProjectController {
     
     public static var shared = ProjectController()
-    
-    var delegate: ProjectControllerDelegate? = nil
     
     func loadProjects(syncResult: SyncResult) async{
         let requestUrl = Store.shared.serverURL+"/api/project/getProjects"
         let params = Dictionary<String,String>()
         do{
             if let projectList: ProjectList = try await RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) {
-                print(projectList)
-                syncResult.projectsLoaded = projectList.projects.count
-                for project in projectList.projects{
-                    syncResult.locationsLoaded += project.locations.count
-                    for location in project.locations{
-                        syncResult.defectsLoaded += location.defects.count
+                //print(projectList.projects)
+                await MainActor.run{
+                    syncResult.projectsLoaded = projectList.projects.count
+                    for project in projectList.projects{
+                        
+                        syncResult.locationsLoaded += project.locations.count
+                        for location in project.locations{
+                            syncResult.defectsLoaded += location.defects.count
+                        }
                     }
                 }
                 try await self.loadProjectImages(data: projectList, syncResult: syncResult)
@@ -38,7 +35,9 @@ class ProjectController {
             }
         }
         catch {
-            syncResult.downloadErrors += 1
+            await MainActor.run{
+                syncResult.downloadErrors += 1
+            }
             print("error loading projects")
         }
     }
@@ -49,7 +48,7 @@ class ProjectController {
     }
     
     func loadProjectImages(data: ProjectList, syncResult: SyncResult) async throws{
-        print("start loading images")
+        //print("start loading images")
         await withTaskGroup(of: Void.self){ taskGroup in
             for project in data.projects{
                 for location in project.locations{
@@ -59,7 +58,9 @@ class ProjectController {
                                 try await ImageController.shared.loadProjectImage(image: location.plan!, syncResult: syncResult)
                             }
                             catch{
-                                syncResult.downloadErrors += 1
+                                await MainActor.run{
+                                    syncResult.downloadErrors += 1
+                                }
                             }
                         }
                     }
@@ -70,7 +71,9 @@ class ProjectController {
                                     try await ImageController.shared.loadProjectImage(image: image, syncResult: syncResult)
                                 }
                                 catch{
-                                    syncResult.downloadErrors += 1
+                                    await MainActor.run{
+                                        syncResult.downloadErrors += 1
+                                    }
                                 }
                             }
                         }
@@ -81,7 +84,9 @@ class ProjectController {
                                         try await ImageController.shared.loadProjectImage(image: image, syncResult: syncResult)
                                     }
                                     catch{
-                                        syncResult.downloadErrors += 1
+                                        await MainActor.run{
+                                            syncResult.downloadErrors += 1
+                                        }
                                     }
                                 }
                             }
@@ -127,7 +132,9 @@ class ProjectController {
                                     try await DefectController.shared.uploadDefect(defect: defect, locationId: location.id, syncResult: syncResult)
                                 }
                                 catch{
-                                    syncResult.uploadErrors += 1
+                                    await MainActor.run{
+                                        syncResult.uploadErrors += 1
+                                    }
                                 }
                             }
                         }
@@ -139,7 +146,9 @@ class ProjectController {
                                             try await DefectController.shared.uploadComment(comment: comment, defectId: defect.id, syncResult: syncResult)
                                         }
                                         catch{
-                                            syncResult.uploadErrors += 1
+                                            await MainActor.run{
+                                                syncResult.uploadErrors += 1
+                                            }
                                         }
                                     }
                                 }
@@ -155,7 +164,9 @@ class ProjectController {
         Task{
             await ProjectController.shared.uploadNewItems(syncResult: syncResult)
             await ProjectController.shared.loadProjects(syncResult: syncResult)
-            delegate?.syncReady()
+            await MainActor.run{
+                syncResult.finished = true
+            }
         }
     }
     

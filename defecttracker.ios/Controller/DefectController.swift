@@ -20,7 +20,9 @@ class DefectController {
         params["dueDate"] = String(defect.dueDate.millisecondsSince1970)
         if let response: IdResponse = try await RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) {
             print("defect \(response.id) uploaded")
-            syncResult.defectsUploaded += 1
+            await MainActor.run{
+                syncResult.defectsUploaded += 1
+            }
             defect.id = response.id
             defect.displayId = response.id
             await withTaskGroup(of: Void.self){ taskGroup in
@@ -29,14 +31,20 @@ class DefectController {
                     count += 1
                     do{
                         if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
-                            syncResult.imagesUploaded += 1
+                            await MainActor.run{
+                                syncResult.imagesUploaded += 1
+                            }
                         }
                         else{
-                            syncResult.uploadErrors += 1
+                            await MainActor.run{
+                                syncResult.uploadErrors += 1
+                            }
                         }
                     }
                     catch{
-                        syncResult.uploadErrors += 1
+                        await MainActor.run{
+                            syncResult.uploadErrors += 1
+                        }
                     }
                 }
                 for comment in defect.comments{
@@ -45,7 +53,9 @@ class DefectController {
                             try await uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
                         }
                         catch{
-                            syncResult.uploadErrors += 1
+                            await MainActor.run{
+                                syncResult.uploadErrors += 1
+                            }
                         }
                     }
                 }
@@ -56,14 +66,20 @@ class DefectController {
                     count += 1
                     do{
                         if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
-                            syncResult.imagesUploaded += 1
+                            await MainActor.run{
+                                syncResult.imagesUploaded += 1
+                            }
                         }
                         else{
-                            syncResult.uploadErrors += 1
+                            await MainActor.run{
+                                syncResult.uploadErrors += 1
+                            }
                         }
                     }
                     catch{
-                        syncResult.uploadErrors += 1
+                        await MainActor.run{
+                            syncResult.uploadErrors += 1
+                        }
                     }
                     
                 }
@@ -73,14 +89,18 @@ class DefectController {
                             try await DefectController.shared.uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
                         }
                         catch{
-                            syncResult.uploadErrors += 1
+                            await MainActor.run{
+                                syncResult.uploadErrors += 1
+                            }
                         }
                     }
                 }
             }
         }
         else{
-            syncResult.uploadErrors += 1
+            await MainActor.run{
+                syncResult.uploadErrors += 1
+            }
         }
     }
     
@@ -91,7 +111,9 @@ class DefectController {
         params["defectId"] = String(defectId)
         if let response: IdResponse = try await RequestController.shared.requestAuthorizedJson(url: requestUrl, withParams: params) {
             print("comment \(response.id) uploaded")
-            syncResult.commentsUploaded += 1
+            await MainActor.run{
+                syncResult.commentsUploaded += 1
+            }
             comment.id = response.id
             await withTaskGroup(of: Void.self){ taskGroup in
                 var count = 0
@@ -99,14 +121,20 @@ class DefectController {
                     count += 1
                     do{
                         if try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count){
-                            syncResult.imagesUploaded += 1
+                            await MainActor.run{
+                                syncResult.imagesUploaded += 1
+                            }
                         }
                         else{
-                            syncResult.uploadErrors += 1
+                            await MainActor.run{
+                                syncResult.uploadErrors += 1
+                            }
                         }
                     }
                     catch{
-                        syncResult.uploadErrors += 1
+                        await MainActor.run{
+                            syncResult.uploadErrors += 1
+                        }
                     }
                     
                 }
@@ -114,7 +142,9 @@ class DefectController {
             
         }
         else{
-            syncResult.uploadErrors += 1
+            await MainActor.run{
+                syncResult.uploadErrors += 1
+            }
         }
     }
     

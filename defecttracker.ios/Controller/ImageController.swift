@@ -23,19 +23,19 @@ class ImageController{
     }
     
     func loadImage(image : ImageData) async -> UIImage?{
-        print("start loading image \(image.id)")
+        //print("start loading image \(image.id)")
         if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
             let uiImage = DocumentStore.shared.readImage(name: image.getLocalFileName())
             return uiImage
         }
-        print("file needs downloading")
+        //print("file needs downloading")
         let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
         let params = [
             "scale" : "100"
         ]
         do{
             if let img = try await RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params) {
-                print("received image \(image.id) for \(image.getLocalFileName())")
+                //print("received image \(image.id) for \(image.getLocalFileName())")
                 DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
                 return img
             }
@@ -48,20 +48,26 @@ class ImageController{
     
     func loadProjectImage(image : ImageData, syncResult: SyncResult) async throws{
         if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
-            syncResult.imagesPresent += 1
+            await MainActor.run{
+                syncResult.imagesPresent += 1
+            }
             return
         }
-        print("file needs downloading")
+        //print("file needs downloading")
         let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
         let params = [
             "scale" : "100"
         ]
         if let img = try await RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params) {
             DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
-            syncResult.imagesLoaded += 1
+            await MainActor.run{
+                syncResult.imagesLoaded += 1
+            }
         }
         else{
-            syncResult.downloadErrors += 1
+            await MainActor.run{
+                syncResult.downloadErrors += 1
+            }
         }
     }
     

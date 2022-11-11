@@ -24,8 +24,10 @@ struct LocationView: View {
         GeometryReader{ geo in
             ScrollView{
                 VStack(alignment: .leading){
-                    Text("description").font(.headline)
-                    Text(self.location.description.isEmpty ? "none".localize() : self.location.description)
+                    if !self.location.description.isEmpty{
+                        Text("description".localize()).font(.headline)
+                        Text(self.location.description)
+                    }
                     if self.uiImage != nil {
                         Text("plan").font(.headline)
                         NavigationLink(destination: PlanView(uiImage: self.uiImage!, defects: self.location.defects)){

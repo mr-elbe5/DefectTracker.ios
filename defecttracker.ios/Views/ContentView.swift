@@ -48,19 +48,22 @@ struct ProjectRow: View {
         self.project=project
     }
     
+    let insets = EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0)
+    
     var body: some View {
         VStack(alignment: .leading){
             Text(project.name).font(.largeTitle).padding(.bottom)
-            Section{
-                Text("description".localize()+":").font(.headline)
-                Text(project.description.isEmpty ? "none".localize() : project.description)
+            if !project.description.isEmpty{
+                Section{
+                    Text(project.description).font(.headline)
+                }.padding(insets)
             }
             Section{
                 ForEach(project.locations){
                     (location : LocationData) in
                     NavigationLink(destination: LocationView(location: location)){
                         NavigationRow(text: location.name)
-                    }.padding(.leading)
+                    }.padding(insets)
                 }
             }
         }.padding(.bottom)

@@ -21,5 +21,9 @@ extension String {
     func localize(s: String) -> String{
         return String(format: NSLocalizedString(self,comment: ""), s)
     }
+    
+    func localize(b: Bool) -> String{
+        return String(format: NSLocalizedString(self,comment: ""), String(b))
+    }
 
 }

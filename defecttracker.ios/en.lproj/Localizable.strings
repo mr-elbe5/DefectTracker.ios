@@ -23,6 +23,7 @@
 "enterDescription"="Enter the description here";
 "error"="Error";
 "fillAllFields"="Fill all fields with *, please";
+"finished" = "Finished: %@";
 "forToday"="today";
 "hello"="Hello world!!";
 "hideKeyboard"="Hide keyboard";
@@ -43,6 +44,7 @@
 "newComment"="Add a comment";
 "newDefect"="Create new defect report";
 "newElements %@"="New elements: %@";
+"no"="no";
 "none"="None";
 "notLoggedIn"="Not logged in";
 "ok"="Ok";
@@ -80,6 +82,7 @@
 "syncErrors" = "Errors: %@";
 "test"="Test code";
 "uploaded"="Uploaded to the cloud:";
+"yes"="yes";
 "yourLoginName..."="Your login name";
 "yourPassword..."="Your password";
 "infoHeader1"="Prerequisites";

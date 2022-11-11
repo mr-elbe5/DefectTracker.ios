@@ -16,13 +16,12 @@ struct ServerView: View{
     private enum alertKey{
         case error
     }
-    @State var showWaitAlert = false
-    @State var showSuccessAlert = false
-    @State var showErrorAlert = false
+    
     @State var showClearAlert = false
+    
     @State var newElementsCount = 0
     
-    @State var syncResult : SyncResult = SyncResult()
+    @StateObject var syncResult : SyncResult = SyncResult()
     
     var body: some View{
         ZStack{
@@ -47,35 +46,30 @@ struct ServerView: View{
                         Text("newElements \(String(newElementsCount))")
                         Button(action: {
                             syncResult.reset()
-                            ProjectController.shared.delegate = self
-                            self.showWaitAlert = true
                             ProjectController.shared.synchronize(syncResult: syncResult)
-                            
                         }) {
                             Text("synchronize")
-                        }.alert(isPresented: $showWaitAlert){
-                            return Alert(title: Text("pleaseWait".localize()), message:Text("syncronizing".localize()), dismissButton: .cancel(Text("cancel")))
-                        }.alert(isPresented: $showSuccessAlert){
-                            return Alert(title: Text("success".localize()), message:Text("syncronizationFinished".localize()), dismissButton: .default(Text("ok")))
-                        }.alert(isPresented: $showErrorAlert){
-                            return Alert(title: Text("error"), message:Text("syncronizationFailed"), dismissButton: .default(Text("ok")))
                         }
                         VStack(alignment: .leading){
                             VStack(alignment: .leading){
-                                Text("uploaded".localize()).padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                                Text("uploaded".localize())
+                                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                                 Text("syncedDefects".localize(i: syncResult.defectsUploaded))
                                 Text("syncedComments".localize(i:syncResult.commentsUploaded))
                                 Text("syncedImages".localize(i: syncResult.imagesUploaded))
                                 Text("syncErrors".localize(i: syncResult.uploadErrors))
                             }
                             VStack(alignment: .leading){
-                                Text("downloaded".localize()).padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                                Text("downloaded".localize())
+                                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                                 Text("syncedProjects".localize(i: syncResult.projectsLoaded))
                                 Text("syncedLocations".localize(i: syncResult.locationsLoaded))
                                 Text("syncedDefects".localize(i: syncResult.defectsLoaded))
                                 Text("syncedImages".localize(i: syncResult.imagesLoaded))
                                 Text("syncErrors".localize(i: syncResult.downloadErrors))
                             }
+                            Text("finished".localize(s: syncResult.finished ? "yes".localize() : "no".localize()))
+                                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                         }
                     }
                 }
@@ -98,21 +92,6 @@ struct ServerView: View{
         }.navigationBarTitle("cloud" ,displayMode: .inline).onAppear{
             self.newElementsCount = ProjectController.shared.countNewElements()
         }
-    }
-    
-}
-
-extension ServerView: ProjectControllerDelegate{
-    
-    func syncReady() {
-        showWaitAlert = false
-        if syncResult.hasErrors(){
-            showErrorAlert = true
-        }
-        else{
-            showSuccessAlert = true
-        }
-        self.newElementsCount=0
     }
     
 }
