@@ -25,7 +25,6 @@ class ImageController{
     func loadImage(image : ImageData) async -> UIImage?{
         print("start loading image \(image.id)")
         if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
-            print("file exists")
             let uiImage = DocumentStore.shared.readImage(name: image.getLocalFileName())
             return uiImage
         }
@@ -47,11 +46,10 @@ class ImageController{
         return nil
     }
     
-    func loadProjectImage(image : ImageData) async throws -> Bool{
+    func loadProjectImage(image : ImageData, syncResult: SyncResult) async throws{
         if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
-            print("file exists")
-            //todo?
-            return false
+            syncResult.imagesPresent += 1
+            return
         }
         print("file needs downloading")
         let serverUrl = Store.shared.serverURL+"/api/image/download/" + String(image.id)
@@ -60,9 +58,11 @@ class ImageController{
         ]
         if let img = try await RequestController.shared.requestAuthorizedImage(url: serverUrl, withParams: params) {
             DocumentStore.shared.saveImage(image: img, name: image.getLocalFileName())
-            return true
+            syncResult.imagesLoaded += 1
         }
-        return false
+        else{
+            syncResult.downloadErrors += 1
+        }
     }
     
     func savedPickedImage(uiImage : UIImage) -> ImageData{

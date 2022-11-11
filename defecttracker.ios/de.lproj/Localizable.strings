@@ -17,6 +17,7 @@
 "description"="Beschreibung";
 "details"="Details";
 "doLogin"="Anmelden";
+"downloaded"="Vom Server geladen:";
 "dueDate"="Zieldatum";
 "enterComment"="Tragen Sie den Kommentar hier ein";
 "enterDescription"="Tragen Sie die Beschreibung hier ein";
@@ -71,12 +72,14 @@
 "status"="Status";
 "success" = "Erfolg";
 "synchronize" = "Synchronisieren";
-"synchronized" = "Neu in die Cloud geladen:\n";
-"syncedDefects" = "Mängel: %@,\n";
-"syncedComments" = "Kommentare: %@,\n";
-"syncedImages" = "Bilder: %@\n";
-"syncedProjects" = "Aus der Cloud geladen:\n%@ Projekte\n";
+"syncedDefects" = "Mängel: %@";
+"syncedComments" = "Kommentare: %@";
+"syncedImages" = "Bilder: %@";
+"syncedLocations" = "Locations:%@";
+"syncedProjects" = "Projekte:%@";
 "syncFailed" = "Die Synchronisierung war nicht erfolgreich.";
+"syncErrors" = "Fehler: %@";
+"uploaded"="Auf den Server gladen:";
 "yourLoginName..."="Ihr Anmeldename...";
 "yourPassword..."="Ihr Passwort...";
 "infoHeader1"="Voraussetzungen";

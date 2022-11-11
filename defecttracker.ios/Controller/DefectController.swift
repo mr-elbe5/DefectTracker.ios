@@ -32,11 +32,11 @@ class DefectController {
                             syncResult.imagesUploaded += 1
                         }
                         else{
-                            syncResult.imageUploadErrors += 1
+                            syncResult.uploadErrors += 1
                         }
                     }
                     catch{
-                        syncResult.imageUploadErrors += 1
+                        syncResult.uploadErrors += 1
                     }
                 }
                 for comment in defect.comments{
@@ -45,7 +45,7 @@ class DefectController {
                             try await uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
                         }
                         catch{
-                            syncResult.defectUploadErrors += 1
+                            syncResult.uploadErrors += 1
                         }
                     }
                 }
@@ -59,11 +59,11 @@ class DefectController {
                             syncResult.imagesUploaded += 1
                         }
                         else{
-                            syncResult.imageUploadErrors += 1
+                            syncResult.uploadErrors += 1
                         }
                     }
                     catch{
-                        syncResult.imageUploadErrors += 1
+                        syncResult.uploadErrors += 1
                     }
                     
                 }
@@ -73,14 +73,14 @@ class DefectController {
                             try await DefectController.shared.uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
                         }
                         catch{
-                            syncResult.commentUploadErrors += 1
+                            syncResult.uploadErrors += 1
                         }
                     }
                 }
             }
         }
         else{
-            syncResult.defectUploadErrors += 1
+            syncResult.uploadErrors += 1
         }
     }
     
@@ -102,11 +102,11 @@ class DefectController {
                             syncResult.imagesUploaded += 1
                         }
                         else{
-                            syncResult.imageUploadErrors += 1
+                            syncResult.uploadErrors += 1
                         }
                     }
                     catch{
-                        syncResult.imageUploadErrors += 1
+                        syncResult.uploadErrors += 1
                     }
                     
                 }
@@ -114,7 +114,7 @@ class DefectController {
             
         }
         else{
-            syncResult.commentUploadErrors += 1
+            syncResult.uploadErrors += 1
         }
     }
     

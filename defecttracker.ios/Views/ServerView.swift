@@ -16,14 +16,13 @@ struct ServerView: View{
     private enum alertKey{
         case error
     }
-    @State var showAlert1 = false;
-    @State var showAlert2 = false;
-    @State var showAlert3 = false;
+    @State var showWaitAlert = false
+    @State var showSuccessAlert = false
+    @State var showErrorAlert = false
+    @State var showClearAlert = false
     @State var newElementsCount = 0
     
     @State var syncResult : SyncResult = SyncResult()
-    
-    @State private var shouldAnimate = false
     
     var body: some View{
         ZStack{
@@ -47,28 +46,36 @@ struct ServerView: View{
                     List{
                         Text("newElements \(String(newElementsCount))")
                         Button(action: {
-                            self.shouldAnimate=true
+                            syncResult.reset()
+                            ProjectController.shared.delegate = self
+                            self.showWaitAlert = true
                             ProjectController.shared.synchronize(syncResult: syncResult)
-                            self.shouldAnimate=false
-                            self.newElementsCount=0
-                            self.showAlert1=true
-                            if syncResult.hasErrors(){
-                                self.showAlert3=true
-                            }
+                            
                         }) {
                             Text("synchronize")
-                        }.alert(isPresented: $showAlert1){
-                            let text = "synchronized".localize() + "\n" +
-                                "syncedDefects".localize(i: self.syncResult.defectsUploaded) +
-                                "syncedComments".localize(i: self.syncResult.commentsUploaded) +
-                                "syncedImages".localize(i: self.syncResult.imagesUploaded) + "\n" +
-                                "syncedProjects".localize(i: self.syncResult.projectsLoaded);
-                            return Alert(title: Text("success"), message:Text(text), dismissButton: .default(Text("ok")))
-                            
-                        }.alert(isPresented: $showAlert3){
-                            let text = "syncFailed".localize();
-                            return Alert(title: Text("error"), message:Text(text), dismissButton: .default(Text("ok")))
-                            
+                        }.alert(isPresented: $showWaitAlert){
+                            return Alert(title: Text("pleaseWait".localize()), message:Text("syncronizing".localize()), dismissButton: .cancel(Text("cancel")))
+                        }.alert(isPresented: $showSuccessAlert){
+                            return Alert(title: Text("success".localize()), message:Text("syncronizationFinished".localize()), dismissButton: .default(Text("ok")))
+                        }.alert(isPresented: $showErrorAlert){
+                            return Alert(title: Text("error"), message:Text("syncronizationFailed"), dismissButton: .default(Text("ok")))
+                        }
+                        VStack(alignment: .leading){
+                            VStack(alignment: .leading){
+                                Text("uploaded".localize()).padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                                Text("syncedDefects".localize(i: syncResult.defectsUploaded))
+                                Text("syncedComments".localize(i:syncResult.commentsUploaded))
+                                Text("syncedImages".localize(i: syncResult.imagesUploaded))
+                                Text("syncErrors".localize(i: syncResult.uploadErrors))
+                            }
+                            VStack(alignment: .leading){
+                                Text("downloaded".localize()).padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                                Text("syncedProjects".localize(i: syncResult.projectsLoaded))
+                                Text("syncedLocations".localize(i: syncResult.locationsLoaded))
+                                Text("syncedDefects".localize(i: syncResult.defectsLoaded))
+                                Text("syncedImages".localize(i: syncResult.imagesLoaded))
+                                Text("syncErrors".localize(i: syncResult.downloadErrors))
+                            }
                         }
                     }
                 }
@@ -76,22 +83,36 @@ struct ServerView: View{
                     VStack{
                         Button(action: {
                             ProjectController.shared.clearProjects()
-                            self.syncResult.projectsLoaded = 0
-                            self.showAlert2=true
+                            self.syncResult.reset()
+                            self.showClearAlert = true
                         })
                         {
                             Text("clearProjects")
-                        }.alert(isPresented: $showAlert2){
+                        }.alert(isPresented: $showClearAlert){
                             return Alert(title: Text("success"), message:Text("projectsCleared"), dismissButton: .default(Text("ok")))
                             
                         }
                     }
                 }
             }
-            ActivityIndicator(shouldAnimate: self.$shouldAnimate)
         }.navigationBarTitle("cloud" ,displayMode: .inline).onAppear{
             self.newElementsCount = ProjectController.shared.countNewElements()
         }
+    }
+    
+}
+
+extension ServerView: ProjectControllerDelegate{
+    
+    func syncReady() {
+        showWaitAlert = false
+        if syncResult.hasErrors(){
+            showErrorAlert = true
+        }
+        else{
+            showSuccessAlert = true
+        }
+        self.newElementsCount=0
     }
     
 }

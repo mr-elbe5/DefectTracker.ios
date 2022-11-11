@@ -11,37 +11,36 @@ import Foundation
 class SyncResult: ObservableObject{
     
     @Published var defectsUploaded : Int = 0
-    @Published var defectUploadErrors : Int = 0
     @Published var commentsUploaded : Int = 0
-    @Published var commentUploadErrors : Int = 0
     @Published var imagesUploaded : Int = 0
-    @Published var imageUploadErrors : Int = 0
+    @Published var imagesPresent : Int = 0
+    
     @Published var projectsLoaded : Int = 0
-    @Published var projectLoadErrors : Int = 0
-    @Published var imagesDownloaded : Int = 0
-    @Published var imageDownloadErrors : Int = 0
+    @Published var locationsLoaded : Int = 0
+    @Published var defectsLoaded : Int = 0
+    @Published var imagesLoaded : Int = 0
     
-    func add(result : SyncResult){
-        defectsUploaded += result.defectsUploaded
-        defectUploadErrors += result.defectUploadErrors
-        commentsUploaded += result.commentsUploaded
-        commentUploadErrors += result.commentUploadErrors
-        imagesUploaded += result.imagesUploaded
-        imageUploadErrors += result.imageUploadErrors
-        projectsLoaded += result.projectsLoaded
-        projectLoadErrors += result.projectLoadErrors
-        imagesDownloaded += result.imagesDownloaded
-        imageDownloadErrors += result.imageDownloadErrors
-    }
-    
-    func addAll(results : Array<SyncResult>){
-        for i in 0..<results.count{
-            self.add(result: results[i])
-        }
-    }
+    @Published var uploadErrors : Int = 0
+    @Published var downloadErrors : Int = 0
     
     func hasErrors() -> Bool{
-        imageDownloadErrors > 0
+        uploadErrors > 0 || downloadErrors > 0
+    }
+    
+    func reset(){
+        defectsUploaded = 0
+        commentsUploaded = 0
+        imagesUploaded = 0
+        imagesPresent = 0
+        
+        projectsLoaded = 0
+        locationsLoaded = 0
+        defectsLoaded = 0
+        imagesLoaded = 0
+        
+        uploadErrors = 0
+        downloadErrors = 0
+        
     }
     
 }
