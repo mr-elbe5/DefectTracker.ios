@@ -60,42 +60,6 @@ class DefectController {
                     }
                 }
             }
-            await withTaskGroup(of: Void.self){ taskGroup in
-                var count = 0
-                for image in defect.images{
-                    count += 1
-                    do{
-                        if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
-                            await MainActor.run{
-                                syncResult.imagesUploaded += 1
-                            }
-                        }
-                        else{
-                            await MainActor.run{
-                                syncResult.uploadErrors += 1
-                            }
-                        }
-                    }
-                    catch{
-                        await MainActor.run{
-                            syncResult.uploadErrors += 1
-                        }
-                    }
-                    
-                }
-                for comment in defect.comments{
-                    if (comment.isNew){
-                        do{
-                            try await DefectController.shared.uploadComment(comment: comment, defectId: response.id, syncResult: syncResult)
-                        }
-                        catch{
-                            await MainActor.run{
-                                syncResult.uploadErrors += 1
-                            }
-                        }
-                    }
-                }
-            }
         }
         else{
             await MainActor.run{

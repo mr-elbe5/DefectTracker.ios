@@ -14,11 +14,14 @@ class ImageController{
     public static var shared = ImageController()
     
     func getImage(image : ImageData) -> UIImage{
+        //print("get image")
         if (DocumentStore.shared.fileExists(fileName: image.getLocalFileName())){
             if let uiImage = DocumentStore.shared.readImage(name: image.getLocalFileName()){
+                //print("return uiimage")
                 return uiImage
             }
         }
+        //print("return placeholder")
         return UIImage(imageLiteralResourceName: "placeholder")
     }
     
@@ -104,9 +107,10 @@ class ImageController{
     func uploadDefectImage(image: ImageData, defectId: Int, count: Int) async throws -> Bool{
         let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId)
         let newFileName = "img-\(defectId)-\(count).jpg"
+        //print("get image \(newFileName)")
         let uiImage = ImageController.shared.getImage(image: image)
         if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
-            print("defect image uploaded with id \(response.id)")
+            //print("defect image uploaded with id \(response.id)")
             image.id = response.id
             return true
         }
@@ -118,7 +122,7 @@ class ImageController{
         let newFileName = "img-\(commentId)-\(count).jpg"
         let uiImage = ImageController.shared.getImage(image: image)
         if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
-            print("comment image uploaded with id \(response.id)")
+            //print("comment image uploaded with id \(response.id)")
             image.id = response.id
             return true
         }
