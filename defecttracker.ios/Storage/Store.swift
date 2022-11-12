@@ -38,6 +38,15 @@ class Store : ObservableObject{
         projectList = get(forKey: StoreKey.projectList) ?? ProjectList()
     }
     
+    func saveProjectList(){
+        store(forKey: StoreKey.projectList, value: projectList)
+    }
+    
+    func saveLoginData(){
+        store(forKey: StoreKey.serverURL, value: serverURL)
+        store(forKey: StoreKey.loginData, value: loginData)
+    }
+    
     private func store(forKey key: StoreKey, value: String) {
         store.set(value, forKey: key.rawValue)
     }

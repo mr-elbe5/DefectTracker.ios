@@ -82,6 +82,7 @@ struct EditCommentView: View {
     func save() -> Void{
         if (self.isComplete()){
             defect.comments.append(comment)
+            Store.shared.saveProjectList()
             goBack()
         }
         else{

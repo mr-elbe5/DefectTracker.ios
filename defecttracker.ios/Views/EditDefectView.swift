@@ -117,6 +117,7 @@ struct EditDefectView: View {
     func save() -> Void{
         if (self.isComplete()){
             self.location.defects.append(self.defect)
+            Store.shared.saveProjectList()
             goBack()
         }
         else{
