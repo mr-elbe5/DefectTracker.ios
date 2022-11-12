@@ -13,15 +13,13 @@ struct ServerView: View{
     
     @ObservedObject var store = Store.shared
     
-    private enum alertKey{
-        case error
-    }
-    
     @State var showClearAlert = false
     
     @State var newElementsCount = 0
     
     @StateObject var syncResult : SyncResult = SyncResult()
+    
+    let projectController = ProjectController()
     
     var body: some View{
         ZStack{
@@ -46,7 +44,7 @@ struct ServerView: View{
                         Text("newElements \(String(newElementsCount))")
                         Button(action: {
                             syncResult.reset()
-                            ProjectController.shared.synchronize(syncResult: syncResult)
+                            projectController.synchronize(syncResult: syncResult)
                         }) {
                             Text("synchronize")
                         }
@@ -68,15 +66,15 @@ struct ServerView: View{
                                 Text("syncedImages".localize(i: syncResult.imagesLoaded))
                                 Text("syncErrors".localize(i: syncResult.downloadErrors))
                             }
-                            Text("finished".localize(s: syncResult.finished ? "yes".localize() : "no".localize()))
-                                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                            Slider(value: $syncResult.progress,in: 0...100)
                         }
                     }
+                    
                 }
                 Section{
                     VStack{
                         Button(action: {
-                            ProjectController.shared.clearProjects()
+                            projectController.clearProjects()
                             self.syncResult.reset()
                             self.showClearAlert = true
                         })
@@ -90,7 +88,7 @@ struct ServerView: View{
                 }
             }
         }.navigationBarTitle("cloud" ,displayMode: .inline).onAppear{
-            self.newElementsCount = ProjectController.shared.countNewElements()
+            self.newElementsCount = projectController.countNewElements()
         }
     }
     

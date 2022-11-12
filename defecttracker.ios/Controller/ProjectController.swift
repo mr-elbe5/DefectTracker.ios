@@ -11,8 +11,6 @@ import SwiftUI
 
 class ProjectController {
     
-    public static var shared = ProjectController()
-    
     func loadProjects(syncResult: SyncResult) async{
         let requestUrl = Store.shared.serverURL+"/api/project/getProjects"
         let params = Dictionary<String,String>()
@@ -162,10 +160,13 @@ class ProjectController {
     
     func synchronize(syncResult: SyncResult){
         Task{
-            await ProjectController.shared.uploadNewItems(syncResult: syncResult)
-            await ProjectController.shared.loadProjects(syncResult: syncResult)
+            await uploadNewItems(syncResult: syncResult)
             await MainActor.run{
-                syncResult.finished = true
+                syncResult.progress = 50.0
+            }
+            await loadProjects(syncResult: syncResult)
+            await MainActor.run{
+                syncResult.progress = 100.0
             }
         }
     }

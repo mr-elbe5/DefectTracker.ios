@@ -54,7 +54,6 @@
 		4EAFAB432471692B0029BEB2 /* DefectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB422471692B0029BEB2 /* DefectController.swift */; };
 		4EB6B2AE245DAD1900C2A9AF /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */; };
 		4EC08890247BD904003ECA63 /* KeyboardAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */; };
-		4EC08892247C0709003ECA63 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC08891247C0709003ECA63 /* ActivityIndicator.swift */; };
 		4EC8F060244A2B8A00B704DB /* PropertyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */; };
 		4ED8F69B245EDFEA00623D5E /* PositionFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED8F69A245EDFEA00623D5E /* PositionFinderView.swift */; };
 		4EEE7AD22479B41A0033E75C /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEE7AD12479B41A0033E75C /* SyncResult.swift */; };
@@ -111,7 +110,6 @@
 		4EAFAB422471692B0029BEB2 /* DefectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefectController.swift; sourceTree = "<group>"; };
 		4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdapter.swift; sourceTree = "<group>"; };
-		4EC08891247C0709003ECA63 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyLine.swift; sourceTree = "<group>"; };
 		4ED8F69A245EDFEA00623D5E /* PositionFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFinderView.swift; sourceTree = "<group>"; };
 		4EEE7AD12479B41A0033E75C /* SyncResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
@@ -234,7 +232,6 @@
 		4E81C08F2445EC0F00D31927 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4EC08891247C0709003ECA63 /* ActivityIndicator.swift */,
 				4E8961AC2472DC9300626EF3 /* AppInfo.swift */,
 				4E81C0742445E7B100D31927 /* ContentView.swift */,
 				4E50EE89244780BB001D98E5 /* DefectView.swift */,
@@ -357,7 +354,6 @@
 				4E81C0732445E7B100D31927 /* SceneDelegate.swift in Sources */,
 				4E81C0B42446325C00D31927 /* Statics.swift in Sources */,
 				4EC8F060244A2B8A00B704DB /* PropertyLine.swift in Sources */,
-				4EC08892247C0709003ECA63 /* ActivityIndicator.swift in Sources */,
 				4EAFAB432471692B0029BEB2 /* DefectController.swift in Sources */,
 				4E81C09E2445ECB800D31927 /* DocumentStore.swift in Sources */,
 				4E81C0972445ECA900D31927 /* UserData.swift in Sources */,

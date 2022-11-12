@@ -24,7 +24,7 @@ struct NavigationRow: View{
             Text(text).foregroundColor(Color.primary).padding(insets)
             Spacer()
             Image(systemName: "chevron.right").foregroundColor(Color.accentColor).padding(.trailing)
-        }.background(Color(red: 0.95, green: 0.95, blue: 0.95)).foregroundColor(Color.accentColor)
+        }.background(Color(red: 0.95, green: 0.95, blue: 0.95)).cornerRadius(10).foregroundColor(Color.accentColor)
     }
 }
 

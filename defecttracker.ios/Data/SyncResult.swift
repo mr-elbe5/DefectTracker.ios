@@ -24,7 +24,7 @@ class SyncResult: ObservableObject{
     @Published var uploadErrors : Int = 0
     @Published var downloadErrors : Int = 0
     
-    @Published var finished = false
+    @Published var progress: Double = 0.0
     
     func hasErrors() -> Bool{
         uploadErrors > 0 || downloadErrors > 0
@@ -44,7 +44,7 @@ class SyncResult: ObservableObject{
         uploadErrors = 0
         downloadErrors = 0
         
-        finished = false
+        progress = 0.0
         
     }
     
