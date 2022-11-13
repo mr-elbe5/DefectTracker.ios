@@ -57,9 +57,7 @@ struct PlanView: View{
     }
     
     func getScale(geo: GeometryProxy) -> CGFloat{
-        let scale = geo.size.width < geo.size.height ? geo.size.width / self.uiImage.size.width : geo.size.height / self.uiImage.size.height
-        print(scale)
-        return scale
+        geo.size.width < geo.size.height ? geo.size.width / self.uiImage.size.width : geo.size.height / self.uiImage.size.height
     }
     
     func getOffset(geo: GeometryProxy, scale: CGFloat) -> CGSize{
