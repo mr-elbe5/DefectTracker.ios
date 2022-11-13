@@ -41,8 +41,10 @@ struct StaticPlanView: View{
                         .renderingMode(.original)
                         .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                     ForEach(self.defects) { defect in
-                        Image(uiImage: self.marker)
-                            .offset(self.getMarkerOffset(frameSize: geo.size, defect: defect))
+                        if defect.hasValidPosition{
+                            Image(uiImage: self.marker)
+                                .offset(self.getMarkerOffset(frameSize: geo.size, defect: defect))
+                        }
                     }
                 }
             }.frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)

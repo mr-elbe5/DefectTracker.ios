@@ -55,6 +55,8 @@
 		4EB6B2AE245DAD1900C2A9AF /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */; };
 		4EC08890247BD904003ECA63 /* KeyboardAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */; };
 		4EC8F060244A2B8A00B704DB /* PropertyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */; };
+		4ED5354A2920EBAB00D3E798 /* ZoomableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */; };
+		4ED5354C292107D800D3E798 /* TapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED5354B292107D800D3E798 /* TapOverlay.swift */; };
 		4ED8F69B245EDFEA00623D5E /* PositionFinderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED8F69A245EDFEA00623D5E /* PositionFinderView.swift */; };
 		4EEE7AD22479B41A0033E75C /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEE7AD12479B41A0033E75C /* SyncResult.swift */; };
 /* End PBXBuildFile section */
@@ -111,6 +113,8 @@
 		4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdapter.swift; sourceTree = "<group>"; };
 		4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyLine.swift; sourceTree = "<group>"; };
+		4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableScrollView.swift; sourceTree = "<group>"; };
+		4ED5354B292107D800D3E798 /* TapOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapOverlay.swift; sourceTree = "<group>"; };
 		4ED8F69A245EDFEA00623D5E /* PositionFinderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionFinderView.swift; sourceTree = "<group>"; };
 		4EEE7AD12479B41A0033E75C /* SyncResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -252,6 +256,8 @@
 				4E50EE6F244710AE001D98E5 /* ServerView.swift */,
 				4E88CCD8247B0F200054E64C /* StaticPlanView.swift */,
 				4E2600732450D87400AC0B84 /* View.swift */,
+				4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */,
+				4ED5354B292107D800D3E798 /* TapOverlay.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -335,12 +341,14 @@
 			files = (
 				4E81C0712445E7B100D31927 /* AppDelegate.swift in Sources */,
 				4ED8F69B245EDFEA00623D5E /* PositionFinderView.swift in Sources */,
+				4ED5354C292107D800D3E798 /* TapOverlay.swift in Sources */,
 				4E81C0A72445ECCA00D31927 /* ImageModel.swift in Sources */,
 				4E50EE8A244780BB001D98E5 /* DefectView.swift in Sources */,
 				4E81C0962445ECA900D31927 /* JWT.swift in Sources */,
 				4E2600742450D87400AC0B84 /* View.swift in Sources */,
 				4E88CCD9247B0F200054E64C /* StaticPlanView.swift in Sources */,
 				4E50EE7824471EC8001D98E5 /* ProjectList.swift in Sources */,
+				4ED5354A2920EBAB00D3E798 /* ZoomableScrollView.swift in Sources */,
 				4E50EE70244710AE001D98E5 /* ServerView.swift in Sources */,
 				4E2600722450D5AD00AC0B84 /* NavigationRow.swift in Sources */,
 				4E81C0AD2445ECD900D31927 /* ImagePicker.swift in Sources */,
@@ -457,7 +465,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -513,7 +521,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

@@ -67,7 +67,7 @@
 "removeFiles"="Remove all files";
 "save"="Save";
 "savePhoto"="Save photo";
-"setMarkerHint"="Long press on the plan sets the position marker";
+"setMarkerHint"="Tapping on the plan sets the position marker";
 "startInfo"="If you are starting neu with the app, go to the cloud (top right), log in and load your projects.";
 "state"="State";
 "status"="Status";

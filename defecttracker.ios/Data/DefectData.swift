@@ -64,6 +64,10 @@ class DefectData : Identifiable, Codable, ObservableObject{
         return id >= Statics.minNewId
     }
     
+    var hasValidPosition : Bool{
+        position != .zero
+    }
+    
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)

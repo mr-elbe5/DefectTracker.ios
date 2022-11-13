@@ -32,94 +32,48 @@ struct PositionFinderView: View{
     }
     
     var body: some View {
+        Text("setMarkerHint").font(.footnote).underline().background(Color.white).foregroundColor(Color.red).padding(3)
         GeometryReader{ geo in
-            VStack(alignment: .leading){
+            ZoomableScrollView{
+                let scale = getScale(geo: geo)
+                let offset = getOffset(geo: geo, scale: scale)
+                let width = scale * uiImage.size.width
+                let height = scale * uiImage.size.height
                 ZStack(alignment: .topLeading){
-                    Image(uiImage: self.uiImage)
-                        .resizable()
-                        .frame(width: self.getFrameWidth(frameSize: geo.size), height: self.getFrameHeight(frameSize: geo.size), alignment: .topLeading)
-                    Image(uiImage: self.marker)
-                        .offset(self.getMarkerOffset(frameSize: geo.size))
-                }.offset(x: self.currentPosition.width,y: self.currentPosition.height)
-                    .gesture(DragGesture(minimumDistance: 0)
-                        .onChanged(){ value in
-                            if (self.startTime == nil){
-                                self.startTime = value.time
-                                self.startLocation = value.location
-                            }
-                            self.setCurrentPosition(frameSize: geo.size, translation: value.translation)
+                    Image(uiImage: self.uiImage).scaleEffect(scale)
+                        .frame(width: width, height: height)
+                        .offset(offset)
+                        .overlay(
+                            TapOverlay { point in
+                                //print(point)
+                                //print("image size: \(uiImage.size)")
+                                //print("offset: \(offset)")
+                                defect.position.width = (point.x - offset.width)*10000/width
+                                defect.position.height = (point.y - offset.height)*10000/height
+                        })
+                    if defect.hasValidPosition{
+                        Image(uiImage: self.marker)
+                            .offset(getDefectOffset(defect: defect, scale: scale, offset: offset))
                     }
-                    .onEnded { value in
-                        self.setCurrentPosition(frameSize: geo.size, translation: value.translation)
-                        if !(self.hasMoved(location: value.location)), let startTime = self.startTime {
-                            let interval = value.time.timeIntervalSince(startTime)
-                            if interval > 0.5 {
-                                self.setMarkerInImage(frameSize: geo.size, location: value.location)
-                            }
-                        }
-                        self.startTime = nil
-                        self.newPosition = self.currentPosition
-                    }).animation(.default, value: 0)
-            }.frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                .clipped().contentShape(Rectangle())
-            Text("setMarkerHint").font(.footnote).underline().background(Color.white).foregroundColor(Color.red).padding(3)
+                }
+            }
         }
     }
     
-    func getImageScale(frameSize : CGSize) -> CGFloat{
-        if frameSize.width >= frameSize.height {
-            return frameSize.width / self.uiImage.size.width
-        }
-        else {
-            return frameSize.height / self.uiImage.size.height
-        }
+    func getScale(geo: GeometryProxy) -> CGFloat{
+        let scale = geo.size.width < geo.size.height ? geo.size.width / self.uiImage.size.width : geo.size.height / self.uiImage.size.height
+        print(scale)
+        return scale
     }
     
-    func getFrameWidth(frameSize : CGSize) -> CGFloat{
-        return getImageScale(frameSize : frameSize) * self.uiImage.size.width
+    func getOffset(geo: GeometryProxy, scale: CGFloat) -> CGSize{
+        CGSize(width: (self.uiImage.size.width*scale - geo.size.width - geo.safeAreaInsets.leading)/2,
+               height: (self.uiImage.size.height*scale - geo.size.height - geo.safeAreaInsets.top)/2)
     }
     
-    func getFrameHeight(frameSize : CGSize) -> CGFloat{
-        return getImageScale(frameSize : frameSize) * self.uiImage.size.height
-    }
-    
-    func getMarkerOffset(frameSize : CGSize) -> CGSize{
-        let x : CGFloat = defect.position.width/10000 * getFrameWidth(frameSize: frameSize) - 8
-        let y : CGFloat = defect.position.height/10000 * getFrameHeight(frameSize: frameSize)
-        return CGSize(width: x, height: y)
-    }
-    
-    func getScrollLimit(frameSize: CGSize) -> CGSize{
-        return CGSize(width: frameSize.width - getFrameWidth(frameSize: frameSize),height: frameSize.height - getFrameHeight(frameSize: frameSize))
-    }
-    
-    func updatePosition(frameSize: CGSize){
-        let limit = getScrollLimit(frameSize: frameSize)
-        let width = max(min(0,(currentPosition.width - frameSize.width/2) + frameSize.width/2),limit.width)
-        let height = max(min(0,(currentPosition.height - frameSize.height/2) + frameSize.height/2),limit.height)
-        self.currentPosition = CGSize(width: width, height: height)
-        self.newPosition = CGSize(width: width, height: height)
-    }
-
-    private func setCurrentPosition(frameSize: CGSize, translation: CGSize){
-        let limit = getScrollLimit(frameSize: frameSize)
-        let width = max(min(0,translation.width + self.newPosition.width),limit.width)
-        let height = max(min(0,translation.height + self.newPosition.height),limit.height)
-        self.currentPosition = CGSize(width: width, height: height)
-    }
-    
-    private func getMarkerPosition(frameSize : CGSize) -> CGSize{
-        let markerPos = CGSize(width: defect.position.width*frameSize.width/100 - 9, height: defect.position.height*frameSize.height/10000 - 1)
-        return markerPos
-    }
-    
-    private func setMarkerInImage(frameSize : CGSize, location: CGPoint){
-        defect.position.width=(location.x - currentPosition.width)*10000/getFrameWidth(frameSize: frameSize)
-        defect.position.height=(location.y - currentPosition.height)*10000/getFrameHeight(frameSize: frameSize)
-    }
-
-    private func hasMoved(location: CGPoint) -> Bool{
-        return Int(abs(self.startLocation.x - location.x)) > 5 || Int(abs(self.startLocation.y - location.y)) > 5
+    func getDefectOffset(defect: DefectData, scale: CGFloat, offset: CGSize) -> CGSize{
+        CGSize(width: defect.position.width/10000 * scale * self.uiImage.size.width - 8 + offset.width,
+               height: defect.position.height/10000 * scale * self.uiImage.size.height + offset.height)
     }
     
 }
@@ -140,3 +94,4 @@ struct PositionFinderView_Previews: PreviewProvider {
         }.navigationBarTitle("home", displayMode: .inline)
     }
 }
+
