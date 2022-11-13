@@ -34,22 +34,18 @@ struct StaticPlanView: View{
     
     var body: some View {
         GeometryReader{ geo in
-            VStack(alignment: .leading){
-                ZStack(alignment: .topLeading){
-                    Image(uiImage: self.uiImage)
-                        .resizable()
-                        .renderingMode(.original)
-                        .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                    ForEach(self.defects) { defect in
-                        if defect.hasValidPosition{
-                            Image(uiImage: self.marker)
-                                .offset(self.getMarkerOffset(frameSize: geo.size, defect: defect))
-                        }
+            ZStack(alignment: .topLeading){
+                Image(uiImage: self.uiImage)
+                    .resizable()
+                    .renderingMode(.original)
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
+                ForEach(self.defects) { defect in
+                    if defect.hasValidPosition{
+                        Image(uiImage: self.marker)
+                            .offset(self.getMarkerOffset(frameSize: geo.size, defect: defect))
                     }
                 }
             }.frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                .clipped().contentShape(Rectangle())
-            
         }
     }
     

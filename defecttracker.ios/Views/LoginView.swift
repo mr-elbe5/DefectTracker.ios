@@ -79,7 +79,6 @@ struct LoginView: View{
                 }
             }
         }.navigationBarTitle("login" ,displayMode: .inline)
-            .modifier(KeyboardAdapter())
     }
     
     func doLogin() -> Void{

@@ -53,7 +53,6 @@
 		4EAFAB4124715DB60029BEB2 /* IdResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB4024715DB60029BEB2 /* IdResponse.swift */; };
 		4EAFAB432471692B0029BEB2 /* DefectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB422471692B0029BEB2 /* DefectController.swift */; };
 		4EB6B2AE245DAD1900C2A9AF /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */; };
-		4EC08890247BD904003ECA63 /* KeyboardAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */; };
 		4EC8F060244A2B8A00B704DB /* PropertyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */; };
 		4ED5354A2920EBAB00D3E798 /* ZoomableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */; };
 		4ED5354C292107D800D3E798 /* TapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED5354B292107D800D3E798 /* TapOverlay.swift */; };
@@ -111,7 +110,6 @@
 		4EAFAB4024715DB60029BEB2 /* IdResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdResponse.swift; sourceTree = "<group>"; };
 		4EAFAB422471692B0029BEB2 /* DefectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefectController.swift; sourceTree = "<group>"; };
 		4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
-		4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdapter.swift; sourceTree = "<group>"; };
 		4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyLine.swift; sourceTree = "<group>"; };
 		4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableScrollView.swift; sourceTree = "<group>"; };
 		4ED5354B292107D800D3E798 /* TapOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapOverlay.swift; sourceTree = "<group>"; };
@@ -245,7 +243,6 @@
 				4E927EA824719F570027650A /* ImageBlock.swift */,
 				4E81C0A92445ECD900D31927 /* ImagePicker.swift */,
 				4EA825E62476856A00CB3D75 /* ImageView.swift */,
-				4EC0888F247BD904003ECA63 /* KeyboardAdapter.swift */,
 				4E50EE872447804E001D98E5 /* LocationView.swift */,
 				4E81C0AA2445ECD900D31927 /* LoginView.swift */,
 				4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */,
@@ -372,7 +369,6 @@
 				4E81C0752445E7B100D31927 /* ContentView.swift in Sources */,
 				4E8961A72472A47100626EF3 /* PlanView.swift in Sources */,
 				4E0C2AA92451C6310080C1A7 /* EditDefectView.swift in Sources */,
-				4EC08890247BD904003ECA63 /* KeyboardAdapter.swift in Sources */,
 				4EB6B2AE245DAD1900C2A9AF /* MultilineTextField.swift in Sources */,
 				4E81C0AE2445ECD900D31927 /* LoginView.swift in Sources */,
 				4E81C0982445ECA900D31927 /* LoginData.swift in Sources */,

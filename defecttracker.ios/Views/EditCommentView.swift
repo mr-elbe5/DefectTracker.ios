@@ -26,6 +26,7 @@ struct EditCommentView: View {
     }
     
     init(defect: DefectData, comment: DefectCommentData){
+        comment.state = defect.state
         self.comment = comment
         self.defect = defect
     }
@@ -37,7 +38,7 @@ struct EditCommentView: View {
                     Text("comment".localize()+" *")
                     MultilineTextField(placeholder: "enterComment".localize(), text: self.$comment.comment).withMultilineStyle()
                 }
-                Picker(selection: self.$defect.state, label: Text("state".localize()+" *")){
+                Picker(selection: self.$comment.state, label: Text("state".localize()+" *")){
                     ForEach((0...3), id: \.self){
                         Text(NSLocalizedString(Statics.defectStates[$0],comment: "")).tag(Statics.defectStates[$0])
                     }
@@ -72,7 +73,7 @@ struct EditCommentView: View {
             if showImagePicker{
                 ImagePicker(isShown: $showImagePicker, sourceType: self.$sourceType, imageList: self.$comment.images)
             }
-        }.navigationBarTitle(Text("comment \(String(comment.id))"), displayMode: .inline).modifier(KeyboardAdapter())
+        }.navigationBarTitle(Text("comment \(String(comment.id))"), displayMode: .inline)
     }
     
     func isComplete() -> Bool{
@@ -82,6 +83,7 @@ struct EditCommentView: View {
     func save() -> Void{
         if (self.isComplete()){
             defect.comments.append(comment)
+            defect.state = comment.state
             Store.shared.saveProjectList()
             goBack()
         }

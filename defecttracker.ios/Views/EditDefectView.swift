@@ -50,6 +50,7 @@ struct EditDefectView: View {
                         MultilineTextField(placeholder: "enterDescription".localize(), text: self.$defect.description).withMultilineStyle()
                     }
                     Picker(selection: self.$defect.assigned, label: Text("assigned".localize()+" *")){
+                        Text("pleaseSelect")
                         ForEach(self.users, id: \.self.id) { (opt:UserData) in
                             Text(opt.name).tag(opt)
                         }
@@ -66,13 +67,11 @@ struct EditDefectView: View {
                             Text(NSLocalizedString(Statics.defectStates[$0],comment: "")).tag(Statics.defectStates[$0])
                         }
                     }
-                    if self.uiImage != nil {
-                        VStack(alignment: .leading, spacing: 2){
-                            Text("positionInPlan").font(.headline)
-                            NavigationLink(destination: PositionFinderView(defect: self.defect, uiImage: self.uiImage!)){
-                                StaticPlanView(uiImage: self.uiImage!, defect: self.defect)
-                                    .frame(width: geo.size.width, height: geo.size.width * self.uiImage!.size.height / self.uiImage!.size.width)
-                            }
+                    if let image = uiImage {
+                        Text("positionInPlan").font(.headline)
+                        NavigationLink(destination: PositionFinderView(defect: self.defect, uiImage: image)){
+                            StaticPlanView(uiImage: image, defect: self.defect)
+                                .frame(width: geo.size.width, height: geo.size.width * image.size.height / image.size.width)
                         }
                     }
                 }
@@ -107,7 +106,7 @@ struct EditDefectView: View {
             if self.showImagePicker{
                 ImagePicker(isShown: self.$showImagePicker, sourceType: self.$sourceType, imageList: self.$defect.images)
             }
-        }.navigationBarTitle(Text("defect \(String(defect.displayId))"), displayMode: .inline).modifier(KeyboardAdapter())
+        }.navigationBarTitle(Text("defect \(String(defect.displayId))"), displayMode: .inline)
     }
     
     func isComplete() -> Bool{
