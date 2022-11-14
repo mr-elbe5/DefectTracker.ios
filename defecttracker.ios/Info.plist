@@ -32,9 +32,9 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Take Pictures</string>
+	<string>The camera can be used to take pictures of newly added defects or in follow-up comments, if a defect has been resolved</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Take Pictures</string>
+	<string>The photo library can be used to use previously taken pictures fornewly added defects or in follow-up comments, if a defect has been resolved</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

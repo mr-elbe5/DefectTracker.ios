@@ -51,6 +51,7 @@
 		4EAFAB3F247134F60029BEB2 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB3E247134F60029BEB2 /* Date.swift */; };
 		4EAFAB4124715DB60029BEB2 /* IdResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB4024715DB60029BEB2 /* IdResponse.swift */; };
 		4EAFAB432471692B0029BEB2 /* DefectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAFAB422471692B0029BEB2 /* DefectController.swift */; };
+		4EB51660292296AD002DF7E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4EB51662292296AD002DF7E2 /* InfoPlist.strings */; };
 		4EB6B2AE245DAD1900C2A9AF /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */; };
 		4EC8F060244A2B8A00B704DB /* PropertyLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */; };
 		4ED5354A2920EBAB00D3E798 /* ZoomableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */; };
@@ -107,6 +108,8 @@
 		4EAFAB3E247134F60029BEB2 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		4EAFAB4024715DB60029BEB2 /* IdResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdResponse.swift; sourceTree = "<group>"; };
 		4EAFAB422471692B0029BEB2 /* DefectController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefectController.swift; sourceTree = "<group>"; };
+		4EB51661292296AD002DF7E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4EB51663292296B4002DF7E2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4EB6B2AD245DAD1900C2A9AF /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		4EC8F05F244A2B8A00B704DB /* PropertyLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyLine.swift; sourceTree = "<group>"; };
 		4ED535492920EBAB00D3E798 /* ZoomableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableScrollView.swift; sourceTree = "<group>"; };
@@ -156,6 +159,7 @@
 				4E81C07E2445E7B100D31927 /* Info.plist */,
 				4E81C0782445E7B100D31927 /* Preview Content */,
 				4E81C0882445EA9100D31927 /* Localizable.strings */,
+				4EB51662292296AD002DF7E2 /* InfoPlist.strings */,
 			);
 			path = defecttracker.ios;
 			sourceTree = "<group>";
@@ -323,6 +327,7 @@
 				4E81C0862445EA9100D31927 /* Localizable.strings in Resources */,
 				4E81C07A2445E7B100D31927 /* Preview Assets.xcassets in Resources */,
 				4E81C0772445E7B100D31927 /* Assets.xcassets in Resources */,
+				4EB51660292296AD002DF7E2 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +405,15 @@
 				4E81C0892445EAAD00D31927 /* de */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		4EB51662292296AD002DF7E2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4EB51661292296AD002DF7E2 /* en */,
+				4EB51663292296B4002DF7E2 /* de */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -528,7 +542,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"defecttracker.ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 5UG99476V8;
 				ENABLE_PREVIEWS = YES;
@@ -552,7 +566,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"defecttracker.ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 5UG99476V8;
 				ENABLE_PREVIEWS = YES;
