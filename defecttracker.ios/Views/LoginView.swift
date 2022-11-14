@@ -16,11 +16,11 @@ struct LoginView: View{
     @State var password = ""
     
     private enum alertKey{
-        case incomplete, error
+        case success, incomplete, error
     }
-    @State var showErrorAlert = false;
-    @State private var currentError : alertKey = .incomplete
-    @State var showSuccessAlert = false;
+    
+    @State var showAlert = false
+    @State private var currentAlert : alertKey = .success
     
     @Environment(\.presentationMode) var presentation
     
@@ -57,16 +57,8 @@ struct LoginView: View{
                     self.doLogin()
                 }) {
                     Label("doLogin", systemImage: "person.fill.checkmark")
-                }.alert(isPresented: $showErrorAlert){
-                    switch currentError{
-                    case .incomplete:
-                        return Alert(title: Text("incomplete"), message:Text("fillAllFields"), dismissButton: .default(Text("ok")))
-                    default:
-                        return Alert(title: Text("error"), message:Text("loginError"), dismissButton: .default(Text("ok")))
-                    }
-                }
-                .alert(isPresented: $showSuccessAlert){
-                    return Alert(title: Text("success"), message:Text("successfullyLoggedIn"), dismissButton: .default(Text("ok")))
+                }.alert(isPresented: $showAlert){
+                    return Alert(title: Text(getAlertTitle()), message:Text(getAlertText()), dismissButton: .default(Text("ok")))
                 }
             }
             Section{
@@ -84,25 +76,48 @@ struct LoginView: View{
             Task{
                 do{
                     if try await LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password){
-                        self.showSuccessAlert=true
+                        self.currentAlert = .success
+                        self.showAlert=true
                     }else{
-                        self.currentError = .error
-                        self.showErrorAlert=true
+                        self.currentAlert = .error
+                        self.showAlert=true
                     }
                 } catch{
-                    self.currentError = .error
-                    self.showErrorAlert=true
+                    self.currentAlert = .error
+                    self.showAlert=true
                 }
             }
         }
         else{
-            self.currentError = .incomplete
-            self.showErrorAlert=true
+            self.currentAlert = .incomplete
+            self.showAlert=true
         }
     }
     
     func isComplete() -> Bool{
         return !self.serverURL.isEmpty && !self.login.isEmpty && !self.password.isEmpty
+    }
+    
+    func getAlertTitle() -> String{
+        switch currentAlert{
+        case .success:
+            return "success".localize()
+        case .incomplete:
+            return "incomplete".localize()
+        default:
+            return "error".localize()
+        }
+    }
+    
+    func getAlertText() -> String{
+        switch currentAlert{
+        case .success:
+            return "successfullyLoggedIn".localize()
+        case .incomplete:
+            return "fillAllFields".localize()
+        default:
+            return "loginError".localize()
+        }
     }
     
 }
