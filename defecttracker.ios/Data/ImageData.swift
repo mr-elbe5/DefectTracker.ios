@@ -33,11 +33,11 @@ class ImageData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        displayName = try values.decode(String.self, forKey: .displayName)
         fileName = try values.decode(String.self, forKey: .fileName)
+        displayName = try values.decodeIfPresent(String.self, forKey: .displayName) ?? fileName
         contentType = try values.decode(String.self, forKey: .contentType)
-        width = try values.decode(Int.self, forKey: .width)
-        height = try values.decode(Int.self, forKey: .height)
+        width = try values.decodeIfPresent(Int.self, forKey: .width) ?? 0
+        height = try values.decodeIfPresent(Int.self, forKey: .height) ?? 0
     }
 
     func encode(to encoder: Encoder) throws {

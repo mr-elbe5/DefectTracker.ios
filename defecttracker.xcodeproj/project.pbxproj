@@ -27,7 +27,6 @@
 		4E81C07A2445E7B100D31927 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E81C0792445E7B100D31927 /* Preview Assets.xcassets */; };
 		4E81C07D2445E7B100D31927 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E81C07B2445E7B100D31927 /* LaunchScreen.storyboard */; };
 		4E81C0862445EA9100D31927 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4E81C0882445EA9100D31927 /* Localizable.strings */; };
-		4E81C0962445ECA900D31927 /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0902445ECA900D31927 /* JWT.swift */; };
 		4E81C0972445ECA900D31927 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0912445ECA900D31927 /* UserData.swift */; };
 		4E81C0982445ECA900D31927 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0922445ECA900D31927 /* LoginData.swift */; };
 		4E81C0992445ECA900D31927 /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E81C0932445ECA900D31927 /* ImageData.swift */; };
@@ -84,7 +83,6 @@
 		4E81C07E2445E7B100D31927 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E81C0872445EA9100D31927 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E81C0892445EAAD00D31927 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		4E81C0902445ECA900D31927 /* JWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
 		4E81C0912445ECA900D31927 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		4E81C0922445ECA900D31927 /* LoginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
 		4E81C0932445ECA900D31927 /* ImageData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
@@ -209,7 +207,6 @@
 				4E81C0952445ECA900D31927 /* Error.swift */,
 				4EAFAB4024715DB60029BEB2 /* IdResponse.swift */,
 				4E81C0932445ECA900D31927 /* ImageData.swift */,
-				4E81C0902445ECA900D31927 /* JWT.swift */,
 				4E50EE7924472918001D98E5 /* LocationData.swift */,
 				4E81C0922445ECA900D31927 /* LoginData.swift */,
 				4E50EE7524471C0F001D98E5 /* ProjectData.swift */,
@@ -341,7 +338,6 @@
 				4ED5354C292107D800D3E798 /* TapOverlay.swift in Sources */,
 				4E81C0A72445ECCA00D31927 /* ImageModel.swift in Sources */,
 				4E50EE8A244780BB001D98E5 /* DefectView.swift in Sources */,
-				4E81C0962445ECA900D31927 /* JWT.swift in Sources */,
 				4E2600742450D87400AC0B84 /* View.swift in Sources */,
 				4E88CCD9247B0F200054E64C /* StaticPlanView.swift in Sources */,
 				4E50EE7824471EC8001D98E5 /* ProjectList.swift in Sources */,
@@ -532,16 +528,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"defecttracker.ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 5UG99476V8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = defecttracker.ios/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Defect Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.defect.tracker;
 				PRODUCT_NAME = defecttracker;
 				SWIFT_VERSION = 5.0;
@@ -554,16 +552,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"defecttracker.ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 5UG99476V8;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = defecttracker.ios/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Defect Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.defect.tracker;
 				PRODUCT_NAME = defecttracker;
 				SWIFT_VERSION = 5.0;

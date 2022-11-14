@@ -15,8 +15,6 @@ struct ServerView: View{
     
     @State var showClearAlert = false
     
-    @State var newElementsCount = 0
-    
     @StateObject var syncResult : SyncResult = SyncResult()
     
     let projectController = ProjectController()
@@ -36,17 +34,17 @@ struct ServerView: View{
                         }
                     }
                     NavigationLink(destination: LoginView()){
-                        Text("login")
+                        Label("login", systemImage: "arrow.right")
                     }.foregroundColor(Color.accentColor)
                 }
                 Section{
                     List{
-                        Text("newElements \(String(newElementsCount))")
+                        Text("newElements \(String(syncResult.newElementsCount))")
                         Button(action: {
                             syncResult.reset()
                             projectController.synchronize(syncResult: syncResult)
                         }) {
-                            Text("synchronize")
+                            Label("synchronize", systemImage: "arrow.triangle.2.circlepath")
                         }
                         VStack(alignment: .leading){
                             VStack(alignment: .leading){
@@ -70,6 +68,8 @@ struct ServerView: View{
                         }
                     }
                     
+                }.onAppear(){
+                    syncResult.newElementsCount = projectController.countNewElements()
                 }
                 Section{
                     VStack{
@@ -79,7 +79,7 @@ struct ServerView: View{
                             self.showClearAlert = true
                         })
                         {
-                            Text("clearProjects")
+                            Label("clearProjects", systemImage: "trash").foregroundColor(Color.red)
                         }.alert(isPresented: $showClearAlert){
                             return Alert(title: Text("success"), message:Text("projectsCleared"), dismissButton: .default(Text("ok")))
                             
@@ -87,8 +87,6 @@ struct ServerView: View{
                     }
                 }
             }
-        }.navigationBarTitle("cloud" ,displayMode: .inline).onAppear{
-            self.newElementsCount = projectController.countNewElements()
         }
     }
     

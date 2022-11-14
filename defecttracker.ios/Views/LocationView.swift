@@ -15,6 +15,8 @@ struct LocationView: View {
     var uiImage : UIImage?
     @State var createDefect : Int? = nil
     
+    let insets = EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
+    
     init(location : LocationData){
         self.location = location
         self.uiImage = location.plan == nil ? nil : ImageController.shared.getImage(image: location.plan!)
@@ -39,17 +41,14 @@ struct LocationView: View {
                     }
                     Button(action: {
                         self.createDefect=1
-                    }, label: {HStack{
-                        Text("newDefect").foregroundColor(Color.accentColor)
-                        Spacer()
-                        Image(systemName: "chevron.right").foregroundColor(Color.accentColor)
-                        }
+                    }, label: {
+                        Label("newDefect", systemImage: "plus.circle")
                     }).padding(.top)
                     ForEach(self.location.defects){
                         (defect : DefectData) in
                         NavigationLink(destination: DefectView(defect: defect, location: self.location)){
                             NavigationRow(text: "ID \(defect.displayId): \(defect.description)")
-                        }
+                        }.padding(insets)
                     }
                     Spacer()
                 }

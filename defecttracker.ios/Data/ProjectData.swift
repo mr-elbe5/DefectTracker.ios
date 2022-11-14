@@ -33,13 +33,13 @@ class ProjectData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        name = try values.decode(String.self, forKey: .name)
-        description = try values.decode(String.self, forKey: .description)
-        locations = try values.decode(Array<LocationData>.self, forKey: .locations)
+        name = try values.decodeIfPresent(String.self, forKey: .name) ?? "project"
+        description = try values.decodeIfPresent(String.self, forKey: .description) ?? ""
+        locations = try values.decodeIfPresent(Array<LocationData>.self, forKey: .locations) ?? Array<LocationData>()
         for location in locations{
             location.project=self
         }
-        users = try values.decode(Array<UserData>.self, forKey: .users)
+        users = try values.decodeIfPresent(Array<UserData>.self, forKey: .users) ?? Array<UserData>()
         //print("project name= \(name)")
     }
 

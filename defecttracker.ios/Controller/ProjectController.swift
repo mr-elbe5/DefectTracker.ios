@@ -128,6 +128,9 @@ class ProjectController {
                             taskGroup.addTask{
                                 do{
                                     try await DefectController.shared.uploadDefect(defect: defect, locationId: location.id, syncResult: syncResult)
+                                    await MainActor.run{
+                                        syncResult.newElementsCount -= 1
+                                    }
                                 }
                                 catch{
                                     await MainActor.run{
@@ -142,6 +145,9 @@ class ProjectController {
                                     taskGroup.addTask{
                                         do{
                                             try await DefectController.shared.uploadComment(comment: comment, defectId: defect.id, syncResult: syncResult)
+                                            await MainActor.run{
+                                                syncResult.newElementsCount -= 1
+                                            }
                                         }
                                         catch{
                                             await MainActor.run{

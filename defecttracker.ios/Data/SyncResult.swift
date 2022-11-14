@@ -26,6 +26,8 @@ class SyncResult: ObservableObject{
     
     @Published var progress: Double = 0.0
     
+    @Published var newElementsCount: Int = 0
+    
     func hasErrors() -> Bool{
         uploadErrors > 0 || downloadErrors > 0
     }

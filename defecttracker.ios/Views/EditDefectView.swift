@@ -50,7 +50,7 @@ struct EditDefectView: View {
                         MultilineTextField(placeholder: "enterDescription".localize(), text: self.$defect.description).withMultilineStyle()
                     }
                     Picker(selection: self.$defect.assigned, label: Text("assigned".localize()+" *")){
-                        Text("pleaseSelect")
+                        Text("pleaseSelect").tag(UserData())
                         ForEach(self.users, id: \.self.id) { (opt:UserData) in
                             Text(opt.name).tag(opt)
                         }
@@ -64,7 +64,7 @@ struct EditDefectView: View {
                     }
                     Picker(selection: self.$defect.state, label: Text("state".localize()+" *")){
                         ForEach((0...3), id: \.self){
-                            Text(NSLocalizedString(Statics.defectStates[$0],comment: "")).tag(Statics.defectStates[$0])
+                            Text(Statics.defectStates[$0].localize()).tag(Statics.defectStates[$0])
                         }
                     }
                     if let image = uiImage {
@@ -79,28 +79,25 @@ struct EditDefectView: View {
                     Text("images").font(.headline)
                     FormImageBlock(images: self.defect.images)
                 }
-                Button("addPhoto") {
+                Button(action: {
                     self.sourceType = .camera
                     self.showImagePicker.toggle()
-                }
-                Button("addFromGallery") {
+                }, label: {
+                    Label("addPhoto", systemImage: "camera")
+                })
+                Button(action: {
                     self.sourceType = .photoLibrary
                     self.showImagePicker.toggle()
-                }
-                Text("")
+                }, label: {
+                    Label("addFromGallery", systemImage: "photo")
+                })
                 Button(action: {
                     self.save()
                 }) {
-                    Text("save")
+                    Label("save", systemImage: "square.and.arrow.down")
                 }.padding(.top)
                     .alert(isPresented: self.$showAlert1){
                         return Alert(title: Text("incomplete"), message:Text("fillAllFields"), dismissButton: .default(Text("ok")))
-                }
-                HStack(){
-                    Spacer()
-                    Image(systemName: "keyboard.chevron.compact.down").onTapGesture {
-                        self.dismissKeyboard()
-                    }
                 }
             }
             if self.showImagePicker{

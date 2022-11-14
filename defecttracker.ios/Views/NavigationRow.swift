@@ -16,7 +16,7 @@ struct NavigationRow: View{
     let insets = EdgeInsets(top: 2, leading: 10, bottom: 2, trailing: 0)
     
     init(text: String){
-        self.text=NSLocalizedString(text,comment: "")
+        self.text=text.localize()
     }
     
     var body: some View{

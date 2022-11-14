@@ -21,8 +21,7 @@ class ProjectList : Codable, ObservableObject{
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        projects = try values.decode(Array<ProjectData>.self, forKey: .projects)
-        //print("project number= \(projects.count)")
+        projects = try values.decodeIfPresent(Array<ProjectData>.self, forKey: .projects) ?? Array<ProjectData>()
     }
 
     func encode(to encoder: Encoder) throws {

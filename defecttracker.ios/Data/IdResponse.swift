@@ -21,7 +21,7 @@ class IdResponse : Codable, ObservableObject{
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        id = try values.decode(Int.self, forKey: .id)
+        id = try values.decodeIfPresent(Int.self, forKey: .id) ?? 0
         //print("id response = \(id)")
     }
 

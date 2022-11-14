@@ -32,10 +32,11 @@ struct DefectView: View {
                         PropertyLine(key: "id", text: String(self.defect.displayId))
                         PropertyLine(key: "description",text: self.defect.description)
                         PropertyLine(key: "creator",text: self.defect.creator.name)
+                        PropertyLine(key: "onDate",text: Statics.getDateTimeString(date: defect.creationDate))
                         PropertyLine(key: "assigned", text: self.defect.assigned.name)
                         PropertyLine(key: "lot",text: self.defect.lot)
                         PropertyLine(key: "dueDate",date: self.defect.dueDate)
-                        PropertyLine(key: "state", text: NSLocalizedString(self.defect.state, comment: ""))
+                        PropertyLine(key: "state", text: self.defect.state.localize())
                         Spacer(minLength: 20)
                     }
                     Group{
@@ -52,24 +53,19 @@ struct DefectView: View {
                         }
                         Button(action: {
                             self.createComment=1
-                        }, label: {HStack{
-                            Text("newComment").foregroundColor(Color.accentColor)
-                            Spacer()
-                            Image(systemName: "chevron.right").foregroundColor(Color.accentColor)
-                            }
+                        }, label: {
+                            Label("newComment", systemImage: "plus.circle")
                         }).padding(.top)
                     }
-                    ForEach(self.defect.comments){
-                        (comment : DefectCommentData) in
-                        Text("comment".localize()).bold()
+                    ForEach(self.defect.comments){ (comment : DefectCommentData) in
+                        Text("comment".localize()).bold().padding(.top)
                         Text(self.getCommentBy(comment: comment))
                         Text(comment.comment)
-                        Spacer(minLength: 10)
-                        Text("images")
-                        ImageBlock(images: comment.images)
-                        Spacer(minLength: 20)
+                        if !comment.images.isEmpty{
+                            Text("images")
+                            ImageBlock(images: comment.images)
+                        }
                     }
-                    Spacer()
                 }
             }
         }.fullSize()
@@ -77,7 +73,7 @@ struct DefectView: View {
     }
     
     func getCommentBy(comment: DefectCommentData) -> String{
-        return "(" + comment.creator.name + " " + "onDate".localize() + " " + Statics.getDateString(date: comment.creationDate)+")"
+        return "(" + comment.creator.name + " " + "onDate".localize() + " " + Statics.getDateTimeString(date: comment.creationDate)+")"
     }
 }
 

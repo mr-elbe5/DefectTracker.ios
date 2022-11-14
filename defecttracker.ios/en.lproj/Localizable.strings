@@ -72,6 +72,7 @@
 "state"="State";
 "status"="Status";
 "success" = "Success";
+"successfullyLoggedIn" = "You have been logged in successfully.";
 "synchronize" = "Synchronize";
 "syncedDefects" = "Defects: %@";
 "syncedComments" = "Comments: %@";

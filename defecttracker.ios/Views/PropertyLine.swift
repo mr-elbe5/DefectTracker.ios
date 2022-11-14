@@ -20,12 +20,12 @@ struct PropertyLine: View{
     }
     
     init(key: String, text: String){
-        self.label=Text(NSLocalizedString(key,comment: ""))
+        self.label=Text(key.localize())
         self.text=Text(text)
     }
     
     init(key: String, date: Date){
-        self.label=Text(NSLocalizedString(key,comment: ""))
+        self.label=Text(key.localize())
         self.text=Text(Statics.getDateString(date: date))
     }
     

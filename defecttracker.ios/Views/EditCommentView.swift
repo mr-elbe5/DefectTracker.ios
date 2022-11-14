@@ -40,35 +40,33 @@ struct EditCommentView: View {
                 }
                 Picker(selection: self.$comment.state, label: Text("state".localize()+" *")){
                     ForEach((0...3), id: \.self){
-                        Text(NSLocalizedString(Statics.defectStates[$0],comment: "")).tag(Statics.defectStates[$0])
+                        Text(Statics.defectStates[$0].localize()).tag(Statics.defectStates[$0])
                     }
                 }
                 VStack(alignment: .leading, spacing: 2){
                     Text("images").font(.headline)
                     FormImageBlock(images: comment.images)
                 }
-                Button("addPhoto") {
+                Button(action: {
                     self.sourceType = .camera
                     self.showImagePicker.toggle()
-                }
-                Button("addFromGallery") {
+                }, label: {
+                    Label("addPhoto", systemImage: "camera")
+                })
+                Button(action: {
                     self.sourceType = .photoLibrary
                     self.showImagePicker.toggle()
-                }
-                Text("")
+                }, label: {
+                    Label("addFromGallery", systemImage: "photo")
+                })
                 Button(action: {
                     self.save()
                 }) {
-                    Text("save")
-                }.padding(.top).alert(isPresented: $showAlert1){
-                    return Alert(title: Text("incomplete"), message:Text("fillAllFields"), dismissButton: .default(Text("ok")))
-                }
-                HStack(){
-                    Spacer()
-                    Image(systemName: "keyboard.chevron.compact.down").onTapGesture {
-                        self.dismissKeyboard()
+                    Label("save", systemImage: "square.and.arrow.down")
+                }.padding(.top)
+                    .alert(isPresented: $showAlert1){
+                        return Alert(title: Text("incomplete"), message:Text("fillAllFields"), dismissButton: .default(Text("ok")))
                     }
-                }
             }
             if showImagePicker{
                 ImagePicker(isShown: $showImagePicker, sourceType: self.$sourceType, imageList: self.$comment.images)

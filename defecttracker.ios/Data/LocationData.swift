@@ -34,10 +34,10 @@ class LocationData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        name = try values.decode(String.self, forKey: .name)
-        description = try values.decode(String.self, forKey: .description)
+        name = try values.decodeIfPresent(String.self, forKey: .name) ?? "location"
+        description = try values.decodeIfPresent(String.self, forKey: .description) ?? ""
         plan = try values.decodeIfPresent(ImageData.self, forKey: .plan)
-        defects = try values.decode(Array<DefectData>.self, forKey: .defects)
+        defects = try values.decodeIfPresent(Array<DefectData>.self, forKey: .defects) ?? Array<DefectData>()
     }
 
     func encode(to encoder: Encoder) throws {

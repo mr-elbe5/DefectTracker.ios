@@ -19,7 +19,7 @@ struct Statics {
     
     static func localizedState(index: Int) -> String{
         if index >= 0 && index < 4 {
-            return NSLocalizedString(defectStates[index],comment: "")
+            return defectStates[index].localize()
         }
         return ""
     }

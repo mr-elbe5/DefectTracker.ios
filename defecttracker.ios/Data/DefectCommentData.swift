@@ -45,12 +45,12 @@ class DefectCommentData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        creator.id = try values.decode(Int.self, forKey: .creatorId)
-        creator.name = try values.decode(String.self, forKey: .creatorName)
-        creationDate = try values.decode(Date.self, forKey: .creationDate)
-        comment = try values.decode(String.self, forKey: .comment)
-        state = try values.decode(String.self, forKey: .state)
-        images = try values.decode(Array<ImageData>.self, forKey: .images)
+        creator.id = try values.decodeIfPresent(Int.self, forKey: .creatorId) ?? 1
+        creator.name = try values.decodeIfPresent(String.self, forKey: .creatorName) ?? "n/n"
+        creationDate = try values.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date.now
+        comment = try values.decodeIfPresent(String.self, forKey: .comment) ?? ""
+        state = try values.decodeIfPresent(String.self, forKey: .state) ?? "OPEN"
+        images = try values.decodeIfPresent(Array<ImageData>.self, forKey: .images) ?? Array<ImageData>()
     }
 
     func encode(to encoder: Encoder) throws {

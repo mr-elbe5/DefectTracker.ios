@@ -18,8 +18,9 @@ struct LoginView: View{
     private enum alertKey{
         case incomplete, error
     }
-    @State var showAlert1 = false;
-    @State private var currentAlert : alertKey = .incomplete
+    @State var showErrorAlert = false;
+    @State private var currentError : alertKey = .incomplete
+    @State var showSuccessAlert = false;
     
     @Environment(\.presentationMode) var presentation
     
@@ -55,28 +56,25 @@ struct LoginView: View{
                 Button(action: {
                     self.doLogin()
                 }) {
-                    Text("doLogin")
-                }.alert(isPresented: $showAlert1){
-                    switch currentAlert{
+                    Label("doLogin", systemImage: "person.fill.checkmark")
+                }.alert(isPresented: $showErrorAlert){
+                    switch currentError{
                     case .incomplete:
                         return Alert(title: Text("incomplete"), message:Text("fillAllFields"), dismissButton: .default(Text("ok")))
                     default:
                         return Alert(title: Text("error"), message:Text("loginError"), dismissButton: .default(Text("ok")))
                     }
                 }
+                .alert(isPresented: $showSuccessAlert){
+                    return Alert(title: Text("success"), message:Text("successfullyLoggedIn"), dismissButton: .default(Text("ok")))
+                }
             }
             Section{
                 Button(action: {
                     LoginController.shared.doLogout()
                 }) {
-                    Text("logout")
+                    Label("logout", systemImage: "person.fill.xmark").foregroundColor(Color.red)
                 }.disabled(!Store.shared.loginData.isLoggedIn())
-            }
-            HStack(){
-                Spacer()
-                Image(systemName: "keyboard.chevron.compact.down").onTapGesture {
-                    self.dismissKeyboard()
-                }
             }
         }.navigationBarTitle("login" ,displayMode: .inline)
     }
@@ -86,29 +84,25 @@ struct LoginView: View{
             Task{
                 do{
                     if try await LoginController.shared.doLogin(serverURL: self.serverURL, login: self.login, password: self.password){
-                        self.goBack()
+                        self.showSuccessAlert=true
                     }else{
-                        self.currentAlert = .error
-                        self.showAlert1=true
+                        self.currentError = .error
+                        self.showErrorAlert=true
                     }
                 } catch{
-                    self.currentAlert = .error
-                    self.showAlert1=true
+                    self.currentError = .error
+                    self.showErrorAlert=true
                 }
             }
         }
         else{
-            self.currentAlert = .incomplete
-            self.showAlert1=true
+            self.currentError = .incomplete
+            self.showErrorAlert=true
         }
     }
     
     func isComplete() -> Bool{
         return !self.serverURL.isEmpty && !self.login.isEmpty && !self.password.isEmpty
-    }
-    
-    func goBack(){
-        self.presentation.wrappedValue.dismiss()
     }
     
 }

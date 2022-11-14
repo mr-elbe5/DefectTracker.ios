@@ -71,23 +71,23 @@ class DefectData : Identifiable, Codable, ObservableObject{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
-        displayId = try values.decode(Int.self, forKey: .displayId)
-        description = try values.decode(String.self, forKey: .description)
+        displayId = try values.decodeIfPresent(Int.self, forKey: .displayId) ?? id
+        description = try values.decodeIfPresent(String.self, forKey: .description) ?? ""
         creator=UserData()
-        creator.id = try values.decode(Int.self, forKey: .creatorId)
-        creator.name = try values.decode(String.self, forKey: .creatorName)
+        creator.id = try values.decodeIfPresent(Int.self, forKey: .creatorId) ?? 1
+        creator.name = try values.decodeIfPresent(String.self, forKey: .creatorName) ?? "n/n"
         assigned = UserData()
-        assigned.id = try values.decode(Int.self, forKey: .assignedId)
-        assigned.name = try values.decode(String.self, forKey: .assignedName)
-        lot = try values.decode(String.self, forKey: .lot)
-        dueDate = try values.decode(Date.self, forKey: .dueDate)
-        planId = try values.decode(Int.self, forKey: .planId)
-        position.width = try CGFloat(values.decode(Int.self, forKey: .positionX))
-        position.height = try CGFloat(values.decode(Int.self, forKey: .positionY))
-        positionComment = try values.decode(String.self, forKey: .positionComment)
-        state = try values.decode(String.self, forKey: .state)
-        images = try values.decode(Array<ImageData>.self, forKey: .images)
-        comments = try values.decode(Array<DefectCommentData>.self, forKey: .comments)
+        assigned.id = try values.decodeIfPresent(Int.self, forKey: .assignedId) ?? 1
+        assigned.name = try values.decodeIfPresent(String.self, forKey: .assignedName) ?? "n/n"
+        lot = try values.decodeIfPresent(String.self, forKey: .lot) ?? ""
+        dueDate = try values.decodeIfPresent(Date.self, forKey: .dueDate) ?? Date.now
+        planId = try values.decodeIfPresent(Int.self, forKey: .planId) ?? 0
+        position.width = try CGFloat(values.decodeIfPresent(Int.self, forKey: .positionX) ?? 0)
+        position.height = try CGFloat(values.decodeIfPresent(Int.self, forKey: .positionY) ?? 0)
+        positionComment = try values.decodeIfPresent(String.self, forKey: .positionComment) ?? ""
+        state = try values.decodeIfPresent(String.self, forKey: .state) ?? "OPEN"
+        images = try values.decodeIfPresent(Array<ImageData>.self, forKey: .images) ?? Array<ImageData>()
+        comments = try values.decodeIfPresent(Array<DefectCommentData>.self, forKey: .comments) ?? Array<DefectCommentData>()
     }
 
     func encode(to encoder: Encoder) throws {
