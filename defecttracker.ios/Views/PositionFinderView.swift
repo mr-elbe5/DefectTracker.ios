@@ -18,13 +18,6 @@ struct PositionFinderView: View{
     
     let marker = UIImage(imageLiteralResourceName: "redarrow")
     
-    @State private var currentPosition: CGSize = .zero
-    @State private var newPosition: CGSize = .zero
-    @State private var startLocation: CGPoint = .zero
-    @State private var startTime: Date? = nil
-    @State private var previousScaleIndex : Int = 0
-    @State var scaleIndex : Int = 0
-    
     init(defect: DefectData, uiImage: UIImage){
         self.defect = defect
         self.uiImage=uiImage
@@ -34,7 +27,8 @@ struct PositionFinderView: View{
     var body: some View {
         Text("setMarkerHint").font(.footnote).underline().background(Color.white).foregroundColor(Color.red).padding(3)
         GeometryReader{ geo in
-            ZoomableScrollView{
+            ImageScrollView(image: uiImage)
+            /*ZoomableScrollView{
                 let scale = getScale(geo: geo)
                 let offset = getOffset(geo: geo, scale: scale)
                 let width = scale * uiImage.size.width
@@ -43,20 +37,15 @@ struct PositionFinderView: View{
                     Image(uiImage: self.uiImage).scaleEffect(scale)
                         .frame(width: width, height: height)
                         .offset(offset)
-                        .overlay(
-                            TapOverlay { point in
-                                //print(point)
-                                //print("image size: \(uiImage.size)")
-                                //print("offset: \(offset)")
-                                defect.position.width = (point.x - offset.width)*10000/width
-                                defect.position.height = (point.y - offset.height)*10000/height
-                        })
+                        .onTapGesture() {
+                            print("tapped")
+                        }
                     if defect.hasValidPosition{
                         Image(uiImage: self.marker)
                             .offset(getDefectOffset(defect: defect, scale: scale, offset: offset))
                     }
                 }
-            }
+            }*/
         }
     }
     
