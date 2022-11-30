@@ -14,22 +14,18 @@ struct StaticPlanView: View{
     var defects : Array<DefectData>
     
     let uiImage : UIImage
-    var imageRatio : CGFloat = 0.0
     
     let marker = UIImage(imageLiteralResourceName: "redarrow")
     
     init(uiImage : UIImage, defects: Array<DefectData>){
         self.uiImage = uiImage
         self.defects = defects
-        self.imageRatio = uiImage.size.height / uiImage.size.width
-        
     }
     
     init(uiImage : UIImage, defect: DefectData){
         self.uiImage = uiImage
         self.defects=Array<DefectData>()
         self.defects.append(defect)
-        self.imageRatio = uiImage.size.height / uiImage.size.width
     }
     
     var body: some View {

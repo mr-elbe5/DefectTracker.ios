@@ -9,76 +9,88 @@
 import Foundation
 import SwiftUI
 
-struct PositionFinderView: View{
+struct PositionFinderView: View, TouchDelegate{
     
     @ObservedObject var defect : DefectData
     
     let uiImage : UIImage
-    var imageRatio : CGFloat = 0.0
     
     let marker = UIImage(imageLiteralResourceName: "redarrow")
     
     init(defect: DefectData, uiImage: UIImage){
         self.defect = defect
         self.uiImage=uiImage
-        self.imageRatio = uiImage.size.height / uiImage.size.width
     }
     
     var body: some View {
         Text("setMarkerHint").font(.footnote).underline().background(Color.white).foregroundColor(Color.red).padding(3)
-        GeometryReader{ geo in
-            ImageScrollView(image: uiImage)
-            /*ZoomableScrollView{
-                let scale = getScale(geo: geo)
-                let offset = getOffset(geo: geo, scale: scale)
-                let width = scale * uiImage.size.width
-                let height = scale * uiImage.size.height
-                ZStack(alignment: .topLeading){
-                    Image(uiImage: self.uiImage).scaleEffect(scale)
-                        .frame(width: width, height: height)
-                        .offset(offset)
-                        .onTapGesture() {
-                            print("tapped")
-                        }
-                    if defect.hasValidPosition{
-                        Image(uiImage: self.marker)
-                            .offset(getDefectOffset(defect: defect, scale: scale, offset: offset))
-                    }
-                }
-            }*/
-        }
+        DefectImageScrollView(image: uiImage, touchDelegate: self, defect: defect)
     }
     
-    func getScale(geo: GeometryProxy) -> CGFloat{
-        geo.size.width < geo.size.height ? geo.size.width / self.uiImage.size.width : geo.size.height / self.uiImage.size.height
-    }
-    
-    func getOffset(geo: GeometryProxy, scale: CGFloat) -> CGSize{
-        CGSize(width: (self.uiImage.size.width*scale - geo.size.width - geo.safeAreaInsets.leading)/2,
-               height: (self.uiImage.size.height*scale - geo.size.height - geo.safeAreaInsets.top)/2)
-    }
-    
-    func getDefectOffset(defect: DefectData, scale: CGFloat, offset: CGSize) -> CGSize{
-        CGSize(width: defect.position.width/10000 * scale * self.uiImage.size.width - 8 + offset.width,
-               height: defect.position.height/10000 * scale * self.uiImage.size.height + offset.height)
+    func touched(at relativePosition: CGSize) {
+        defect.position = CGSize(width: relativePosition.width*10000, height: relativePosition.height*10000)
     }
     
 }
 
-struct PositionFinderView_Previews: PreviewProvider {
-    @State static var defect = DefectData()
-    static let uiImage = UIImage(imageLiteralResourceName: "placeholder")
+struct DefectImageScrollView : UIViewRepresentable, TouchDelegate{
     
-    static var previews: some View {
-        GeometryReader{ geo in
-            ScrollView(.vertical){
-                VStack(alignment: .leading){
-                    Text("test")
-                    PositionFinderView(defect: self.defect, uiImage: self.uiImage)
-                    Text("test")
-                }
-            }
-        }.navigationBarTitle("home", displayMode: .inline)
+    var image: UIImage
+    var touchDelegate: TouchDelegate? = nil
+    
+    @ObservedObject var defect: DefectData
+    
+    func makeUIView(context: Context) -> UIMarkedImageScrollView {
+        let scrollView = UIMarkedImageScrollView(image: image)
+        scrollView.relativeMarkerPosition = CGSize(width: defect.position.width/10000, height: defect.position.height/10000)
+        scrollView.touchDelegate = self
+        return scrollView
     }
+
+    func updateUIView(_ view: UIMarkedImageScrollView, context: Context) {
+        view.updateMarkerPosition()
+    }
+    
+    func touched(at relativePosition: CGSize) {
+        touchDelegate?.touched(at: relativePosition)
+        
+    }
+    
+}
+
+class UIMarkedImageScrollView: UIImageScrollView{
+    
+    var relativeMarkerPosition : CGSize = .zero
+    var marker = UIImageView(image: UIImage(imageLiteralResourceName: "redarrow"))
+    var markerFrame : CGRect = .zero
+    
+    override func setup(){
+        super.setup()
+        addSubview(marker)
+        markerFrame = CGRect(x: -marker.frame.width/2, y: 0, width: marker.frame.width, height: marker.frame.height)
+    }
+    
+    override func touched(pnt: CGPoint){
+        setRelativeMarkerPosition(pnt: pnt)
+        touchDelegate?.touched(at: relativeMarkerPosition)
+        updateMarkerPosition()
+    }
+    
+    func setRelativeMarkerPosition(pnt: CGPoint){
+        relativeMarkerPosition = CGSize(width: pnt.x/image.size.width, height: pnt.y/image.size.height)
+    }
+    
+    func updateMarkerPosition(){
+        marker.frame = markerFrame.offsetBy(dx: relativeMarkerPosition.width*contentSize.width, dy: relativeMarkerPosition.height*contentSize.height)
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        updateMarkerPosition()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateMarkerPosition()
+    }
+    
 }
 

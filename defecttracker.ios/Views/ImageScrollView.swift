@@ -13,9 +13,15 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
+protocol TouchDelegate{
+    func touched(at relativePosition: CGSize)
+}
+
 struct ImageScrollView : UIViewRepresentable, TouchDelegate{
     
     var image: UIImage
+    var touchDelegate: TouchDelegate? = nil
+    
     func makeUIView(context: Context) -> UIImageScrollView {
         let scrollView = UIImageScrollView(image: image)
         scrollView.touchDelegate = self
@@ -25,20 +31,27 @@ struct ImageScrollView : UIViewRepresentable, TouchDelegate{
     func updateUIView(_ view: UIImageScrollView, context: Context) {
     }
     
-    func touched(at point: CGPoint) {
-        print("touch received")
+    func touched(at relativePosition: CGSize) {
+        touchDelegate?.touched(at: relativePosition)
     }
     
 }
 
 class UIImageScrollView: UIScrollView, UIScrollViewDelegate{
     
-    var image: UIImage? = nil
+    var image: UIImage
+    var imageView: UIImageView
+    
     var touchDelegate: TouchDelegate? = nil
     
     init(image: UIImage) {
         self.image = image
+        imageView = UIImageView(image: image)
         super.init(frame: .zero)
+        setup()
+    }
+    
+    func setup(){
         isScrollEnabled = true
         scrollsToTop = false
         isDirectionalLockEnabled = false
@@ -48,13 +61,13 @@ class UIImageScrollView: UIScrollView, UIScrollViewDelegate{
         bounces = false
         bouncesZoom = false
         maximumZoomScale = 2.0
-        minimumZoomScale = 0.5
+        minimumZoomScale = 1.0
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = scene.windows.first{
             let winLen = min(window.bounds.width, window.bounds.height)
             let imgLen = max(image.size.width, image.size.height)
             minimumZoomScale = winLen/imgLen
         }
-        addSubview(UIImageView(image: image))
+        addSubview(imageView)
         contentSize = image.size
         delegate = self
         let gestureRecognizer = UITapGestureRecognizer(target: self, action:  #selector (onTouch))
@@ -66,14 +79,17 @@ class UIImageScrollView: UIScrollView, UIScrollViewDelegate{
     }
     
     @objc func onTouch(_ sender: UIGestureRecognizer){
-        if let view = subviews.first{
-            let point = sender.location(in: view)
-            touchDelegate?.touched(at: point)
-        }
+        let point = sender.location(in: imageView)
+        touched(pnt: point)
+    }
+    
+    func touched(pnt: CGPoint){
+        touchDelegate?.touched(at: CGSize(width: pnt.x/image.size.width, height: pnt.y/image.size.height))
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        subviews.first
+        imageView
     }
     
 }
+
