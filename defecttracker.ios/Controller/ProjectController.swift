@@ -107,9 +107,19 @@ class ProjectController {
                     if defect.isNew{
                         count += 1
                     }
+                    for image in defect.images{
+                        if image.isNew{
+                            count += 1
+                        }
+                    }
                     for comment in defect.comments{
                         if comment .isNew{
                             count += 1
+                        }
+                        for image in comment.images{
+                            if image.isNew{
+                                count += 1
+                            }
                         }
                     }
                 }
@@ -140,6 +150,27 @@ class ProjectController {
                             }
                         }
                         else{
+                            var count = 0
+                            for image in defect.images{
+                                if (image.isNew){
+                                    count += 1
+                                    let nextCount = count
+                                    taskGroup.addTask{
+                                        do{
+                                            try await ImageController.shared.uploadDefectImage(image: image, defectId: defect.id, count: nextCount)
+                                            await MainActor.run{
+                                                syncResult.newElementsCount -= 1
+                                                syncResult.imagesUploaded += 1
+                                            }
+                                        }
+                                        catch{
+                                            await MainActor.run{
+                                                syncResult.uploadErrors += 1
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             for comment in defect.comments{
                                 if (comment.isNew){
                                     taskGroup.addTask{
@@ -152,6 +183,29 @@ class ProjectController {
                                         catch{
                                             await MainActor.run{
                                                 syncResult.uploadErrors += 1
+                                            }
+                                        }
+                                    }
+                                }
+                                else{
+                                    var count = 0
+                                    for image in comment.images{
+                                        if (image.isNew){
+                                            count += 1
+                                            let nextCount = count
+                                            taskGroup.addTask{
+                                                do{
+                                                    try await ImageController.shared.uploadCommentImage(image: image, commentId: comment.id, count: nextCount)
+                                                    await MainActor.run{
+                                                        syncResult.newElementsCount -= 1
+                                                        syncResult.imagesUploaded += 1
+                                                    }
+                                                }
+                                                catch{
+                                                    await MainActor.run{
+                                                        syncResult.uploadErrors += 1
+                                                    }
+                                                }
                                             }
                                         }
                                     }

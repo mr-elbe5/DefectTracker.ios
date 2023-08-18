@@ -27,6 +27,10 @@ class ImageData : Identifiable, Codable, ObservableObject{
     @Published var width = 0
     @Published var height = 0
     
+    var isNew : Bool{
+        return id >= Statics.minNewId
+    }
+    
     init(){
     }
     

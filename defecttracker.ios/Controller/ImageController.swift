@@ -104,7 +104,7 @@ class ImageController{
         }
     }
     
-    func uploadDefectImage(image: ImageData, defectId: Int, count: Int) async throws -> Bool{
+    func uploadDefectImage(image: ImageData, defectId: Int, count: Int) async throws{
         let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId)
         let newFileName = "img-\(defectId)-\(count).jpg"
         //print("get image \(newFileName)")
@@ -112,21 +112,17 @@ class ImageController{
         if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
             //print("defect image uploaded with id \(response.id)")
             image.id = response.id
-            return true
         }
-        return false
     }
     
-    func uploadCommentImage(image: ImageData, commentId: Int, count: Int) async throws -> Bool{
+    func uploadCommentImage(image: ImageData, commentId: Int, count: Int) async throws{
         let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewCommentImage/" + String(commentId)
         let newFileName = "img-\(commentId)-\(count).jpg"
         let uiImage = ImageController.shared.getImage(image: image)
         if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
             //print("comment image uploaded with id \(response.id)")
             image.id = response.id
-            return true
         }
-        return false
     }
     
 }

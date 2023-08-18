@@ -30,15 +30,10 @@ class DefectController {
                 for image in defect.images{
                     count += 1
                     do{
-                        if try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count){
-                            await MainActor.run{
-                                syncResult.imagesUploaded += 1
-                            }
-                        }
-                        else{
-                            await MainActor.run{
-                                syncResult.uploadErrors += 1
-                            }
+                        try await ImageController.shared.uploadDefectImage(image: image, defectId: response.id, count: count)
+                        await MainActor.run{
+                            syncResult.newElementsCount -= 1
+                            syncResult.imagesUploaded += 1
                         }
                     }
                     catch{
@@ -84,15 +79,10 @@ class DefectController {
                 for image in comment.images{
                     count += 1
                     do{
-                        if try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count){
-                            await MainActor.run{
-                                syncResult.imagesUploaded += 1
-                            }
-                        }
-                        else{
-                            await MainActor.run{
-                                syncResult.uploadErrors += 1
-                            }
+                        try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count)
+                        await MainActor.run{
+                            syncResult.newElementsCount -= 1
+                            syncResult.imagesUploaded += 1
                         }
                     }
                     catch{
