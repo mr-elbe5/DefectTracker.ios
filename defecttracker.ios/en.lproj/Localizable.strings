@@ -6,6 +6,7 @@
 "addFromGallery"="Add image from gallery";
 "assigned"="Assigned to";
 "by"="by";
+"cancel"="Cancel";
 "clearProjects"="Delete stored projects";
 "cloud"="Cloud";
 "cloudURL"="Cloud server address";
@@ -17,7 +18,9 @@
 "description"="Description";
 "details"="Details";
 "doLogin"="Log in";
+"download"="Download everything from Server";
 "downloaded"="Downloaded from Server:";
+"downloadHint"="This will delete all new and not yet uploaded items.";
 "dueDate"="Due date";
 "enterComment"="Enter yout comment here";
 "enterDescription"="Enter the description here";
@@ -82,7 +85,9 @@
 "syncFailed" = "Synchronization failed.";
 "syncErrors" = "Errors: %@";
 "test"="Test code";
-"uploaded"="Uploaded to the cloud:";
+"upload"="Upload to the Server";
+"uploaded"="Uploaded to the server:";
+"warning"="Warning";
 "yes"="yes";
 "yourLoginName..."="Your login name";
 "yourPassword..."="Your password";

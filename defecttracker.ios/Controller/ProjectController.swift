@@ -152,6 +152,7 @@ class ProjectController {
                         else{
                             var count = 0
                             for image in defect.images{
+                                print(image.id)
                                 if (image.isNew){
                                     count += 1
                                     let nextCount = count
@@ -161,6 +162,7 @@ class ProjectController {
                                             await MainActor.run{
                                                 syncResult.newElementsCount -= 1
                                                 syncResult.imagesUploaded += 1
+                                                syncResult.itemsUploaded += 1.0
                                             }
                                         }
                                         catch{
@@ -190,6 +192,7 @@ class ProjectController {
                                 else{
                                     var count = 0
                                     for image in comment.images{
+                                        print(image.id)
                                         if (image.isNew){
                                             count += 1
                                             let nextCount = count
@@ -199,6 +202,7 @@ class ProjectController {
                                                     await MainActor.run{
                                                         syncResult.newElementsCount -= 1
                                                         syncResult.imagesUploaded += 1
+                                                        syncResult.itemsUploaded += 1.0
                                                     }
                                                 }
                                                 catch{
@@ -218,15 +222,17 @@ class ProjectController {
         }
     }
     
-    func synchronize(syncResult: SyncResult){
+    func upload(syncResult: SyncResult){
         Task{
             await uploadNewItems(syncResult: syncResult)
-            await MainActor.run{
-                syncResult.progress = 50.0
-            }
+        }
+    }
+    
+    func download(syncResult: SyncResult){
+        Task{
             await loadProjects(syncResult: syncResult)
             await MainActor.run{
-                syncResult.progress = 100.0
+                syncResult.downloadProgress = 1.0
             }
         }
     }

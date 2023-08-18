@@ -24,7 +24,8 @@ class SyncResult: ObservableObject{
     @Published var uploadErrors : Int = 0
     @Published var downloadErrors : Int = 0
     
-    @Published var progress: Double = 0.0
+    @Published var itemsUploaded: Double = 0.0
+    @Published var downloadProgress: Double = 0.0
     
     @Published var newElementsCount: Int = 0
     
@@ -37,6 +38,7 @@ class SyncResult: ObservableObject{
         commentsUploaded = 0
         imagesUploaded = 0
         imagesPresent = 0
+        itemsUploaded = 0
         
         projectsLoaded = 0
         locationsLoaded = 0
@@ -45,8 +47,6 @@ class SyncResult: ObservableObject{
         
         uploadErrors = 0
         downloadErrors = 0
-        
-        progress = 0.0
         
     }
     

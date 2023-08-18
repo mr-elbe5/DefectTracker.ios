@@ -6,6 +6,7 @@
 "addFromGallery"="Bild aus der Galerie hinzufügen";
 "assigned"="Zugewiesen an";
 "by"="von";
+"cancel"="Abbrechen";
 "clearProjects"="Gespeicherte Projekte löschen";
 "cloud"="Cloud";
 "cloudURL"="Cloudserver-Adresse";
@@ -17,7 +18,9 @@
 "description"="Beschreibung";
 "details"="Details";
 "doLogin"="Anmelden";
+"download"="Vom Server herunterladen";
 "downloaded"="Vom Server geladen:";
+"downloadHint"="Dies wird alle neuen und noch nicht hochgeladenen Elemente löschen.";
 "dueDate"="Zieldatum";
 "enterComment"="Tragen Sie den Kommentar hier ein";
 "enterDescription"="Tragen Sie die Beschreibung hier ein";
@@ -82,7 +85,9 @@
 "syncedProjects" = "Projekte: %@";
 "syncFailed" = "Die Synchronisierung war nicht erfolgreich.";
 "syncErrors" = "Fehler: %@";
+"upload"="Auf den Server hochladen";
 "uploaded"="Auf den Server geladen:";
+"warning"="Warnung";
 "yes"="ja";
 "yourLoginName..."="Ihr Anmeldename...";
 "yourPassword..."="Ihr Passwort...";

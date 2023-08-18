@@ -22,6 +22,7 @@ class DefectController {
             print("defect \(response.id) uploaded")
             await MainActor.run{
                 syncResult.defectsUploaded += 1
+                syncResult.itemsUploaded += 1.0
             }
             defect.id = response.id
             defect.displayId = response.id
@@ -34,9 +35,11 @@ class DefectController {
                         await MainActor.run{
                             syncResult.newElementsCount -= 1
                             syncResult.imagesUploaded += 1
+                            syncResult.itemsUploaded += 1.0
                         }
                     }
                     catch{
+                        print("image upload error")
                         await MainActor.run{
                             syncResult.uploadErrors += 1
                         }
@@ -60,6 +63,7 @@ class DefectController {
             await MainActor.run{
                 syncResult.uploadErrors += 1
             }
+            throw "defect upload error"
         }
     }
     
@@ -72,6 +76,7 @@ class DefectController {
             print("comment \(response.id) uploaded")
             await MainActor.run{
                 syncResult.commentsUploaded += 1
+                syncResult.itemsUploaded += 1.0
             }
             comment.id = response.id
             await withTaskGroup(of: Void.self){ taskGroup in
@@ -83,6 +88,7 @@ class DefectController {
                         await MainActor.run{
                             syncResult.newElementsCount -= 1
                             syncResult.imagesUploaded += 1
+                            syncResult.itemsUploaded += 1.0
                         }
                     }
                     catch{
@@ -99,6 +105,7 @@ class DefectController {
             await MainActor.run{
                 syncResult.uploadErrors += 1
             }
+            throw "comment upload error"
         }
     }
     

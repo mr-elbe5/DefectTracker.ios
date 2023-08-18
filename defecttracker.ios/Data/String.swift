@@ -27,3 +27,7 @@ extension String {
     }
 
 }
+
+extension String: Error {
+    
+}
