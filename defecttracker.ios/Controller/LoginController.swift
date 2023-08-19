@@ -27,6 +27,7 @@ class LoginController {
             if (loginData.isLoggedIn()){
                 Store.shared.setServerURL(url: url)
                 Store.shared.setLoginData(data: loginData)
+                print("login data received for \(loginData.login)")
                 //print("\(loginData.dump())")
                 return true
             }

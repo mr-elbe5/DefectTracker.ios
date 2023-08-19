@@ -107,7 +107,6 @@ class ImageController{
     func uploadDefectImage(image: ImageData, defectId: Int, count: Int) async throws{
         let requestUrl = Store.shared.serverURL+"/api/defect/uploadNewDefectImage/" + String(defectId) + "?imageId=" + String(image.id)
         let newFileName = "img-\(defectId)-\(count).jpg"
-        //print("get image \(newFileName)")
         let uiImage = ImageController.shared.getImage(image: image)
         if let response = try await RequestController.shared.uploadAuthorizedImage(url: requestUrl, withImage: uiImage, fileName: newFileName) {
             print("defect image uploaded with id \(response.id)")

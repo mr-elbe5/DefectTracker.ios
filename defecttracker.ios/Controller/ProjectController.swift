@@ -105,19 +105,23 @@ class ProjectController {
             for location in project.locations{
                 for defect in location.defects{
                     if defect.isNew{
+                        print("found new defect \(defect.id)")
                         count += 1
                     }
                     for image in defect.images{
                         if image.isNew{
+                            print("found new defect image \(image.id)")
                             count += 1
                         }
                     }
                     for comment in defect.comments{
                         if comment .isNew{
+                            print("found new comment \(comment.id)")
                             count += 1
                         }
                         for image in comment.images{
                             if image.isNew{
+                                print("found new comment image \(image.id)")
                                 count += 1
                             }
                         }
@@ -152,7 +156,6 @@ class ProjectController {
                         else{
                             var count = 0
                             for image in defect.images{
-                                print(image.id)
                                 if (image.isNew){
                                     count += 1
                                     let nextCount = count
@@ -192,7 +195,6 @@ class ProjectController {
                                 else{
                                     var count = 0
                                     for image in comment.images{
-                                        print(image.id)
                                         if (image.isNew){
                                             count += 1
                                             let nextCount = count
@@ -220,6 +222,7 @@ class ProjectController {
                 }
             }
         }
+        Store.shared.saveProjectList()
     }
     
     func upload(syncResult: SyncResult){

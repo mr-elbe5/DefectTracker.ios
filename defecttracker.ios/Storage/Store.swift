@@ -105,6 +105,7 @@ class Store : ObservableObject{
     
     public func getNextId() -> Int{
         self.id = (self.id + 1)
+        print("next id = \(self.id)")
         store(forKey: .id, value: self.id)
         return self.id
     }
