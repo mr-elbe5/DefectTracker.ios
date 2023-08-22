@@ -79,27 +79,23 @@ class DefectController {
                 syncResult.itemsUploaded += 1.0
             }
             comment.id = response.id
-            await withTaskGroup(of: Void.self){ taskGroup in
-                var count = 0
-                for image in comment.images{
-                    count += 1
-                    do{
-                        try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count)
-                        await MainActor.run{
-                            syncResult.newElementsCount -= 1
-                            syncResult.imagesUploaded += 1
-                            syncResult.itemsUploaded += 1.0
-                        }
+            var count = 0
+            for image in comment.images{
+                count += 1
+                do{
+                    try await ImageController.shared.uploadCommentImage(image: image, commentId: response.id, count: count)
+                    await MainActor.run{
+                        syncResult.newElementsCount -= 1
+                        syncResult.imagesUploaded += 1
+                        syncResult.itemsUploaded += 1.0
                     }
-                    catch{
-                        await MainActor.run{
-                            syncResult.uploadErrors += 1
-                        }
+                }
+                catch{
+                    await MainActor.run{
+                        syncResult.uploadErrors += 1
                     }
-                    
                 }
             }
-            
         }
         else{
             await MainActor.run{
