@@ -113,7 +113,7 @@ class ImageController{
             image.id = response.id
         }
         else{
-            throw "image upload error"
+            throw GeneralError.uploadError
         }
     }
     
@@ -126,7 +126,7 @@ class ImageController{
             image.id = response.id
         }
         else{
-            throw "image upload error"
+            throw GeneralError.uploadError
         }
     }
     

@@ -63,7 +63,7 @@ class DefectController {
             await MainActor.run{
                 syncResult.uploadErrors += 1
             }
-            throw "defect upload error"
+            throw GeneralError.uploadError
         }
     }
     
@@ -101,7 +101,7 @@ class DefectController {
             await MainActor.run{
                 syncResult.uploadErrors += 1
             }
-            throw "comment upload error"
+            throw GeneralError.uploadError
         }
     }
     

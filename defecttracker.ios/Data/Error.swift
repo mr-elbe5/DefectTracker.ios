@@ -15,14 +15,6 @@ enum RequestError: Swift.Error {
     case unexpectedResponse
 }
 
-struct ResponseError: Swift.Error {
-    var responseCode : Int
-    
-    init(code : Int){
-        responseCode=code
-    }
-}
-
 extension RequestError: LocalizedError {
     var errorDescription: String? {
         switch self {
@@ -34,8 +26,31 @@ extension RequestError: LocalizedError {
     }
 }
 
+struct ResponseError: Swift.Error {
+    var responseCode : Int
+    
+    init(code : Int){
+        responseCode=code
+    }
+}
+
 extension ResponseError: LocalizedError {
     var errorDescription: String? {
         return "Response code is \(responseCode)"
     }
 }
+
+enum GeneralError: Swift.Error {
+    case uploadError
+}
+
+extension GeneralError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .uploadError: return "Upload Error"
+        }
+    }
+}
+
+
+
